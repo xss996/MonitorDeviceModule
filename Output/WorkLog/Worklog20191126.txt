@@ -1,0 +1,3 @@
+09:26:52,908		启动运行日志记录
+09:26:52,923		接收到返回信息		{"seq":"20191126092631044","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+09:35:18,345		接收到返回信息		{"seq":"201910090236491","cmdType":3,"cmdAction":"SaveImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}

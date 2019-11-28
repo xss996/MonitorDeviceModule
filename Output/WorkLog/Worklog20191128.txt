@@ -1,0 +1,107 @@
+10:24:05,484		启动运行日志记录
+10:24:05,485		接收到返回信息		{"seq":"20191128102345868","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:24:55,273		启动运行日志记录
+10:24:55,273		接收到返回信息		{"seq":"20191128102345868","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:25:52,621		启动运行日志记录
+10:25:52,621		接收到返回信息		{"seq":"20191128102345868","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:28:38,936		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+10:30:54,163		启动运行日志记录
+10:30:54,163		接收到返回信息		{"seq":"20191128103037372","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:31:16,516		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+10:35:56,286		启动运行日志记录
+10:35:56,286		接收到返回信息		{"seq":"20191128103546073","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:38:50,816		启动运行日志记录
+10:38:50,816		接收到返回信息		{"seq":"20191128103546073","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:41:13,209		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+10:43:33,102		启动运行日志记录
+10:43:33,102		接收到返回信息		{"seq":"20191128104315279","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+10:44:13,499		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+10:52:41,772		启动运行日志记录
+10:52:41,772		接收到返回信息		{"seq":"20191128105222393","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+11:03:41,027		启动运行日志记录
+11:03:41,027		接收到返回信息		{"seq":"20191128110323264","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+11:15:37,816		启动运行日志记录
+11:15:37,816		接收到返回信息		{"seq":"20191128111502615","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+11:16:23,115		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+11:23:43,976		启动运行日志记录
+11:23:43,976		接收到返回信息		{"seq":"20191128112311357","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+11:24:05,258		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+11:24:07,758		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+11:24:41,546		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+11:26:28,620		启动运行日志记录
+11:26:28,620		接收到返回信息		{"seq":"20191128112541713","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+11:29:48,603		启动运行日志记录
+11:29:48,603		接收到返回信息		{"seq":"20191128112845127","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+11:36:39,654		启动运行日志记录
+11:36:39,654		接收到返回信息		{"seq":"20191128113449615","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+12:07:10,460		启动运行日志记录
+12:07:10,647		接收到返回信息		{"seq":"20191128120649455","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+12:08:02,651		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+12:22:46,889		启动运行日志记录
+12:22:46,889		接收到返回信息		{"seq":"20191128122103238","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+12:23:33,106		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+12:25:20,020		启动运行日志记录
+12:25:20,020		接收到返回信息		{"seq":"20191128122443574","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+12:26:30,905		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+12:30:23,015		启动运行日志记录
+12:30:23,015		接收到返回信息		{"seq":"20191128122956105","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+12:31:32,993		启动运行日志记录
+12:31:32,993		接收到返回信息		{"seq":"20191128123111069","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:44:18,599		启动运行日志记录
+13:44:18,599		接收到返回信息		{"seq":"20191128014335604","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:11,773		启动运行日志记录
+13:52:11,788		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:14,822		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:17,009		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:18,884		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:20,760		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:22,947		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:24,822		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:27,009		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:28,883		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:30,760		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:32,947		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:34,822		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:37,009		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:38,883		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:40,758		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:42,945		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:44,819		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:47,007		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:48,881		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:50,759		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:52,946		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:54,821		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:57,008		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:52:58,882		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:00,760		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:02,947		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:04,822		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:07,009		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:08,883		接收到返回信息		{"seq":"20191128015154200","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:10,448		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+14:02:27,496		启动运行日志记录
+14:02:27,496		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:30,917		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:33,105		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:34,982		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:37,168		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:39,043		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:40,918		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:43,105		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:44,982		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:47,169		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:49,043		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:50,918		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:53,105		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:54,973		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:57,170		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:02:59,045		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:03:00,919		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:03:15,595		接收到返回信息		{"seq":"20191128020214169","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:04:10,432		启动运行日志记录
+14:04:10,432		接收到返回信息		{"seq":"20191128020354007","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:05:08,246		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}
+14:08:36,920		启动运行日志记录
+14:08:36,920		接收到返回信息		{"seq":"20191128020820025","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:09:14,389		接收到返回信息		{"seq":"201910090236491","cmdType":4,"cmdAction":"SaveIRHotImg","result":"","sender":"Cmdserver","receiver":"admin","paramList":[]}

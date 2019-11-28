@@ -1,0 +1,298 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.Net.Sockets;
+using System.Net;
+using Newtonsoft;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Collections;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Peiport_pofessionalMonitorDeviceClient.entities;
+
+namespace Peiport_pofessionalMonitorDeviceClient
+{
+    public partial class Form1 : Form
+    {
+        public string strMessageDispBuf = "";
+        clsOneMonOptFun Fun = new clsOneMonOptFun();
+        public clsCmdMonitorClientOpt M_ClientOpt = new clsCmdMonitorClientOpt();
+        SysCtrl sysCtrl = new SysCtrl();
+
+        SysSchedule schedule = new SysSchedule();
+        
+        public Form1()
+        {
+            InitializeComponent();
+            //   M_ClientOpt.Pjson.frmMain = this;
+            //  M_ClientOpt.frmThis = this;
+            schedule.FormInit(this);
+        }
+
+        /// <summary>
+        /// 连接服务器
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int intPort;
+            IPAddress ip;
+            if (!int.TryParse(txbServerPort.Text, out intPort) || !IPAddress.TryParse(txbServerIP.Text, out ip))
+            {
+                return;
+            }
+                
+            schedule.ConnectServer(txbServerIP.Text, intPort);
+        }
+        /// <summary>
+        /// 断开服务器连接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)//断开
+        {         
+            schedule.DisConnectServer();
+        }
+        /// <summary>
+        /// 获取服务器连接状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button32_Click(object sender, EventArgs e)
+        {          
+            if (schedule.GetConnectStatus())
+            {
+                lbConnectState.Text = "已连接";
+            }
+            else
+            {
+                lbConnectState.Text = "未连接";
+            }
+        }
+
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void butUser_Click(object sender, EventArgs e)
+        {
+            string username = textBox1.Text;
+            string password = texPassww.Text;
+            
+           
+            if(!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            {
+                schedule.Login(username, password);
+            }
+        }
+        /// <summary>
+        /// 用户退出登录
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button33_Click(object sender, EventArgs e)
+        {         
+            if (schedule.GetLoginStatus())
+            {
+                string username = textBox1.Text;
+                if (!string.IsNullOrEmpty(username))
+                {
+                    schedule.LoginOut(username);
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("请先登录用户");
+            }
+        }
+        /// <summary>
+        /// 获取用户登录状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button34_Click(object sender, EventArgs e)
+        {
+            if (schedule.GetConnectStatus())
+            {
+               // M_ClientOpt.funbutLoginStatus();
+                if (schedule.GetLoginStatus())
+                {
+                    lb_Status_LoginStatus_Disp.Text = "已登录";
+                }
+                else
+                {
+                    lb_Status_LoginStatus_Disp.Text = "未登录";
+                }
+            }
+            else
+            {
+                MessageBox.Show("连接已经断开，请重新连接后登录!!!");
+            }
+        }
+        /// <summary>
+        /// 启动心跳检测
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button35_Click(object sender, EventArgs e)
+        {
+//            string struser, str2;
+//            struser = textBox1.Text;
+//            if (struser != "")
+//            {
+//                M_ClientOpt.funMonitorServerSecondScan(struser);
+//            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            M_ClientOpt.funMonitorServerReceiCmdDealScan();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (strMessageDispBuf.Length > 0)
+            {
+                if (txbReceiBuf.Text.Length > 2000)
+                    txbReceiBuf.Text = "";
+                txbReceiBuf.Text = txbReceiBuf.Text + strMessageDispBuf;
+                strMessageDispBuf = "";
+            }
+            //SecondScan();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string str1;
+            str1 = txbSendBuf.Text;//命令
+            if (M_ClientOpt.Pjson.m_stuSystemVar.intLoginStatus > 0)
+            {
+                if (str1 != "")
+                {
+                    M_ClientOpt.funSendToUserOneStrCmd(str1);
+                }
+                else
+                {
+                    MessageBox.Show("发送信息不能为空");
+                }
+            }
+            else
+            {
+                MessageBox.Show("请先登录用户");
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string str1, str2, str3, str4, str5, str6, str7, str8;
+            str1 = DateTime.Now.ToString("yyyyMMddHHmmssff");
+            str2 = textBox5.Text;
+            str3 = textBox6.Text;
+            str4 = textBox7.Text;
+            str5 = textBox8.Text;
+            str6 = textBox1.Text;
+            str7 = textBox3.Text;
+            clsCmdMonitorClientOpt.JsonItem json = new clsCmdMonitorClientOpt.JsonItem();
+            json.seq = str1;//标识
+            json.cmdType = str2;//
+            json.cmdAction = str3;
+            json.result = str4;
+            json.paramList = new List<clsCmdMonitorClientOpt.ParamListItem>();
+            json.paramList.Add(new clsCmdMonitorClientOpt.ParamListItem { param = "", value = "" });
+            json.sender = "admin";
+            json.receiver = "CmdServer";
+            str8 = JsonConvert.SerializeObject(json);
+            txbSendBuf.Text = str8;//
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            txbReceiBuf.Text = "";
+        }
+        int id;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
+
+        }
+       
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //判断监控端与服务器断断的状态是否是忙碌，忙碌提示！！
+            M_ClientOpt.funCondition();
+            //DialogResult dr = MessageBox.Show("提示！", "退出", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            //if (dr == DialogResult.OK)   //如果单击“是”按钮
+            //{
+
+            //    e.Cancel = false;                 //关闭窗体
+
+            //}
+            //else if (dr == DialogResult.Cancel)
+            //{
+            //    e.Cancel = true;                  //不执行操作
+            //}
+        }
+        int in1 = 0;
+        public void SecondScan()
+        {
+            while (true)
+            {
+                try
+                {
+                    in1++;
+                    Thread.Sleep(500);
+                    if (in1 >= 100)//
+                    {
+                        in1 = 0;
+                        if (id == 1)
+                        {
+                            label7.Text = "一号监控头";
+                            //M_ClientOpt.funSecondScan();
+                        }
+                        else if (id == 2)
+                        {
+                            label7.Text = "二号监控头";
+                        }
+                        else if (id == 3)
+                        {
+                            label7.Text = "三号监控头";
+                        }
+                        else if (id == 4)
+                        {
+                            label7.Text = "四号监控头";
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+               
+            }
+        }
+        /// <summary>
+        /// 心跳检测
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+           //string strJson =  sysCtrl.SendHeartbeatCmd();
+           // M_ClientOpt.funSendToUserOneStrCmd(strJson);
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+        }
+    }
+}
