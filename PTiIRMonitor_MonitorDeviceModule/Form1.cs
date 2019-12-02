@@ -328,11 +328,13 @@ namespace Peiport_pofessionalMonitorDeviceClient
 
         private void cruise_timer_Tick(object sender, EventArgs e)      //巡检状态定时扫描
         {
-            Debug.WriteLine("巡检状态:" + M_ClientOpt.CruiseStatusScan());
-            if (M_ClientOpt.CruiseStatusScan())
-            {
-                MessageBox.Show("系统正在巡检,请停止巡检后在进行操作...");
-            }
+            // Debug.WriteLine("巡检状态:" + M_ClientOpt.CruiseStatusScan());
+            //if (M_ClientOpt.CruiseStatusScan())
+            //{
+            //    MessageBox.Show("系统正在巡检,请停止巡检后在进行操作...");
+            //}
+            M_ClientOpt.CruiseStatusScan();
+
         }
 
         public void ProxyScan()

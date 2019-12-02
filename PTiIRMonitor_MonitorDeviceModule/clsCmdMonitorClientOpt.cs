@@ -222,9 +222,9 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }    
         }
 
-        public bool CruiseStatusScan()
+        public void CruiseStatusScan()
         {
-            return globalCtrl.CruiseStatus;
+            globalCtrl.CruiseSetUp();
         }
         #endregion
 

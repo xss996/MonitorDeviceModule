@@ -463,7 +463,8 @@
             // 
             // cruise_timer
             // 
-            this.cruise_timer.Interval = 6000;
+            this.cruise_timer.Enabled = true;
+            this.cruise_timer.Interval = 60000;
             this.cruise_timer.Tick += new System.EventHandler(this.cruise_timer_Tick);
             // 
             // Form1

@@ -77,6 +77,7 @@
     <Compile Include="ctrl\RobotCtrl.cs" />
     <Compile Include="ctrl\TempHumCtrl.cs" />
     <Compile Include="ctrl\TVCtrl.cs" />
+    <Compile Include="entities\CruiseObj.cs" />
     <Compile Include="entities\JsonItem.cs" />
     <Compile Include="entities\MonitorDevice.cs" />
     <Compile Include="ctrl\SysCtrl.cs" />

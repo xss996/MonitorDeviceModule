@@ -39,7 +39,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         TempHumCtrl tempHumCtrl = new TempHumCtrl();
         RobotCtrl robotCtrl = new RobotCtrl();
 
-        IRTelnetCtrl ir;
+        public DateTime StartCruiseTime;
 
         /// <summary>
         /// 初始化
@@ -190,8 +190,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                                         par1 = par.value;
                                     }
                                 }
+                                StartCruiseTime = DateTime.Now;   //获取开始巡检时间
                                 if (par1 == "0")
-                                {
+                                {                                    
                                     CruiseStatus = sysCtrl.StartCruise(0);
                                 }
                                 else
@@ -1123,5 +1124,59 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 conn.Close();
             }
         }
+
+        public void CruiseSetUp()
+        {
+            Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            Debug.WriteLine("巡检状态:" + CruiseStatus);
+            if (CruiseStatus)
+            {
+                CruiseObj cruiseObj = new CruiseObj();
+                cruiseObj.StartTime = StartCruiseTime;
+                cruiseObj.CruiseTime = 1;
+
+                cruiseObj.Interval = 1;
+                cruiseObj.CruiseType = 0;
+
+
+                cruiseObj.CruiseType = 1;
+                DateTime date1 = DateTime.Parse("2019-12-02 14:37:58");
+                DateTime date2 = DateTime.Parse("2019-12-02 15:38:58");
+                DateTime date3 = DateTime.Parse("2019-12-02 15:39:58");
+                List<DateTime> dateTimes = new List<DateTime>();
+                dateTimes.Add(date1);
+                dateTimes.Add(date2);
+                dateTimes.Add(date3);
+                cruiseObj.dateTimeList = dateTimes;
+
+                DateTime currentTime = DateTime.Now;  
+                if (cruiseObj.CruiseType == 0)  //隔时巡检
+                {
+                   if((DateUtil.GetSumMinutes(currentTime)-(DateUtil.GetSumMinutes(cruiseObj.StartTime) + cruiseObj.CruiseTime))%cruiseObj.Interval==0)
+                    {
+                        /// goto 巡检操作
+                        Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                        Debug.WriteLine("提示:开始执行隔时巡检操作");
+                    }
+                }
+                if (cruiseObj.CruiseType == 1)  //定时巡检
+                {
+                    foreach(DateTime dt in cruiseObj.dateTimeList) 
+                    {
+                        if (DateUtil.GetSumMinutes(currentTime) == DateUtil.GetSumMinutes(dt))
+                        {
+                            /// goto 巡检操作
+                            Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                            Debug.WriteLine("提示:开始执行定时巡检操作");
+
+                        }
+                    }
+                }
+
+            }
+           
+
+        }
+
     }
 }

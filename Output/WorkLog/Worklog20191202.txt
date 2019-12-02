@@ -1,0 +1,30 @@
+09:55:15,992		启动运行日志记录
+09:55:15,994		接收到返回信息		{"seq":"20191202095448120","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:47:19,631		启动运行日志记录
+13:47:19,633		接收到返回信息		{"seq":"20191202014704375","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:50:07,797		启动运行日志记录
+13:50:07,799		接收到返回信息		{"seq":"20191202014813218","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:50:35,878		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+13:52:55,740		启动运行日志记录
+13:52:55,741		接收到返回信息		{"seq":"20191202015225278","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:53:17,928		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+13:57:29,193		启动运行日志记录
+13:57:29,194		接收到返回信息		{"seq":"20191202015703833","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+13:57:52,004		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+14:01:25,041		启动运行日志记录
+14:01:25,042		接收到返回信息		{"seq":"20191202020111015","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:01:47,816		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+14:35:47,551		启动运行日志记录
+14:35:47,552		接收到返回信息		{"seq":"20191202023528475","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:36:04,874		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+14:47:12,256		启动运行日志记录
+14:47:12,258		接收到返回信息		{"seq":"20191202024656628","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:47:35,659		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+14:55:13,178		启动运行日志记录
+14:55:13,180		接收到返回信息		{"seq":"20191202025455915","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:58:07,760		启动运行日志记录
+14:58:07,763		接收到返回信息		{"seq":"20191202025750437","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+14:59:19,458		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
+15:10:55,314		启动运行日志记录
+15:10:55,316		接收到返回信息		{"seq":"20191202031039126","cmdType":1,"cmdAction":"Login","result":"OK","sender":"CmdServer","receiver":"admin","paramList":[{"state":1}]}
+15:11:14,972		接收到返回信息		{"seq":"201910090236491","cmdType":1,"cmdAction":"CruiseSet","result":"","sender":"CmdServer","receiver":"admin","paramList":[{"param":"setUp","value":"0"}]}
