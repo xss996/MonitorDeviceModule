@@ -68,12 +68,11 @@
     <Compile Include="clsMonitorSystemVar.cs" />
     <Compile Include="clsOneMonOptFun.cs" />
     <Compile Include="const\Constant.cs" />
+    <Compile Include="ctrl\CruiseCtrl.cs" />
     <Compile Include="ctrl\GlobalCtrl.cs" />
-    <Compile Include="ctrl\IRAnalysis.cs" />
     <Compile Include="ctrl\IRAnaParamItem.cs" />
     <Compile Include="ctrl\IRCtrl.cs" />
     <Compile Include="ctrl\PolyDotParamItem.cs" />
-    <Compile Include="ctrl\PTZCtrl.cs" />
     <Compile Include="ctrl\RobotCtrl.cs" />
     <Compile Include="ctrl\TempHumCtrl.cs" />
     <Compile Include="ctrl\TVCtrl.cs" />
@@ -119,6 +118,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

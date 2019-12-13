@@ -278,14 +278,17 @@ namespace Peiport_pofessionalMonitorDeviceClient
                         lsts_Cmduser.Add(strUser);
                         string str4 = "登录命令";
                         frmMain.strMessageDispBuf = str4 + strjson + "\r\n";
-                      //  m_stuSystemVar.intLoginStatus = 1;//用户登录成功
-
-                       string strJson = ctrl.ReceiveMsgScan(job1);
+                        //  m_stuSystemVar.intLoginStatus = 1;//用户登录成功
+                        string strJson = ctrl.ReceiveMsgScan(job1);
+                        //if (!job1.ToString().Contains("Server"))
+                        //{
+                        //    strJson = ctrl.ReceiveMsgScan(job1);
+                        //}
                         if (!string.IsNullOrEmpty(strJson))
                         {
                             funSendOneFramCmd(strJson);
                         }
-                        m_stuSystemVar.intLoginStatus = ctrl.LoginStatus;//用户登录成功
+                      //  m_stuSystemVar.intLoginStatus = ctrl.LoginStatus;//用户登录成功
                     }
                     else
                     {
@@ -295,7 +298,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("提示:命令解析回传过程中出错...");
+                Debug.WriteLine("提示:命令解析回传过程中出错,异常信息:"+ex.Message);
                // throw ex;
 
             }
@@ -318,10 +321,10 @@ namespace Peiport_pofessionalMonitorDeviceClient
                     flag =  true;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 flag = false;
-                Debug.WriteLine("发送指令到服务器出错");
+                Debug.WriteLine("发送指令到服务器出错"+ex.Message);
               //  throw e;
             }
             return flag;

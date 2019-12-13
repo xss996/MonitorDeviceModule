@@ -66,12 +66,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdRevMsg_timer = new System.Windows.Forms.Timer(this.components);
-            this.showMsg_timer = new System.Windows.Forms.Timer(this.components);
             this.label7 = new System.Windows.Forms.Label();
-            this.devStatus_timer = new System.Windows.Forms.Timer(this.components);
-            this.heartBeat_timer = new System.Windows.Forms.Timer(this.components);
-            this.Server_timer = new System.Windows.Forms.Timer(this.components);
-            this.cruise_timer = new System.Windows.Forms.Timer(this.components);
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -431,11 +426,6 @@
             this.cmdRevMsg_timer.Interval = 300;
             this.cmdRevMsg_timer.Tick += new System.EventHandler(this.cmdRevMsg_timer_Tick);
             // 
-            // showMsg_timer
-            // 
-            this.showMsg_timer.Interval = 600;
-            this.showMsg_timer.Tick += new System.EventHandler(this.showMsg_timer_Tick);
-            // 
             // label7
             // 
             this.label7.Location = new System.Drawing.Point(63, 6);
@@ -443,29 +433,6 @@
             this.label7.Size = new System.Drawing.Size(79, 21);
             this.label7.TabIndex = 12;
             this.label7.Text = "label7";
-            // 
-            // devStatus_timer
-            // 
-            this.devStatus_timer.Enabled = true;
-            this.devStatus_timer.Interval = 2000;
-            this.devStatus_timer.Tick += new System.EventHandler(this.devStatus_timer_Tick);
-            // 
-            // heartBeat_timer
-            // 
-            this.heartBeat_timer.Enabled = true;
-            this.heartBeat_timer.Interval = 3000;
-            this.heartBeat_timer.Tick += new System.EventHandler(this.heartBeat_timer_tick);
-            // 
-            // Server_timer
-            // 
-            this.Server_timer.Interval = 2000;
-            this.Server_timer.Tick += new System.EventHandler(this.Server_timer_Tick);
-            // 
-            // cruise_timer
-            // 
-            this.cruise_timer.Enabled = true;
-            this.cruise_timer.Interval = 60000;
-            this.cruise_timer.Tick += new System.EventHandler(this.cruise_timer_Tick);
             // 
             // Form1
             // 
@@ -518,7 +485,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer cmdRevMsg_timer;
-        private System.Windows.Forms.Timer showMsg_timer;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBox8;
@@ -529,10 +495,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Timer devStatus_timer;
-        private System.Windows.Forms.Timer heartBeat_timer;
-        private System.Windows.Forms.Timer Server_timer;
-        private System.Windows.Forms.Timer cruise_timer;
     }
 }
 

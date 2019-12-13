@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTiIRMonitor_MonitorDeviceM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTiIRMonitor_CommandServer", "PTiIRMonitor_CommandServer\PTiIRMonitor_CommandServer.csproj", "{237CBD5D-1A65-4C27-8F43-6ED6071D2E49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTiIRMonitor_MonitorDeviceModuleTests", "PTiIRMonitor_MonitorDeviceModuleTests\PTiIRMonitor_MonitorDeviceModuleTests.csproj", "{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,14 @@ Global
 		{237CBD5D-1A65-4C27-8F43-6ED6071D2E49}.Release|Any CPU.ActiveCfg = Release|x86
 		{237CBD5D-1A65-4C27-8F43-6ED6071D2E49}.Release|x86.ActiveCfg = Release|x86
 		{237CBD5D-1A65-4C27-8F43-6ED6071D2E49}.Release|x86.Build.0 = Release|x86
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Debug|x86.Build.0 = Debug|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{ADCD51C9-969B-4E6D-945F-8A15C84E7B3C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

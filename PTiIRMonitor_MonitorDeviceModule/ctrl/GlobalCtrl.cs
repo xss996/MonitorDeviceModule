@@ -11,6 +11,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 {
@@ -18,9 +19,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
     {
         //状态全局变量
         public int TVConnectStatus = 0;
-        public bool IRConnectStatus = false;    
-        public bool CruiseStatus = false;
-        public int LoginStatus = 0;
+        public bool IRConnectStatus = false;
+        public Constant.CruiseState CruiseStatus = Constant.CruiseState.STOP;
+        public bool LoginStatus = false;
         public bool DatabaseStatus = false;
         public bool FtpStatus = false;
 
@@ -36,10 +37,11 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         public SysCtrl sysCtrl = new SysCtrl();
         public TVCtrl tvCtrl = new TVCtrl();
         public IRCtrl irCtrl = new IRCtrl();
+        public CruiseCtrl cruiseCtrl = new CruiseCtrl();
         TempHumCtrl tempHumCtrl = new TempHumCtrl();
         RobotCtrl robotCtrl = new RobotCtrl();
 
-        public DateTime StartCruiseTime;
+        public DateTime StartCruiseTime = DateTime.Parse("1970-01-01 00:00:00");
 
         /// <summary>
         /// 初始化
@@ -56,8 +58,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
            return tvCtrl.Connect(true);
         }
         public bool IRConnect()
-        {
-            IRConnectStatus = true;
+        {           
            return irCtrl.Connect();
         }
         #endregion
@@ -119,6 +120,11 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             string strJson = null;
             if (job != null)
             {
+               
+                if (job.Property("Server") != null)
+                {
+                    return strJson;
+                }
                 string seq = job["seq"].ToString();
                 int cmdType = Convert.ToInt32(job["cmdType"].ToString());
                 string cmdAction = job["cmdAction"].ToString();
@@ -142,7 +148,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 
                             if (job["paramList"] != null)
                             {
-                                LoginStatus = 1;
+                                LoginStatus = true;
                                 //List<JsonitemParam> pars = JsonConvert.DeserializeObject<List<JsonitemParam>>(job["paramList"].ToString());
                                 //string par1 = "";
                                 //foreach (JsonitemParam par in pars)
@@ -190,14 +196,21 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                                         par1 = par.value;
                                     }
                                 }
-                                StartCruiseTime = DateTime.Now;   //获取开始巡检时间
+                                
+                                Thread thread_cruise = new Thread(CruiseSetUp);
                                 if (par1 == "0")
                                 {                                    
-                                    CruiseStatus = sysCtrl.StartCruise(0);
+                                   // sysCtrl.StartCruise(0);
+                                    cruiseCtrl.isStartCruise = true;
+                                    StartCruiseTime = DateTime.Now;   //获取开始巡检时间
+                                    thread_cruise.Start();
+                                    
                                 }
                                 else
                                 {
-                                    CruiseStatus = sysCtrl.StartCruise(1);
+                                    //sysCtrl.StartCruise(1);
+                                    cruiseCtrl.isStartCruise = false;
+                                    thread_cruise.Abort();
                                 }
                             }
                         }
@@ -238,7 +251,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                     }
 
                     #endregion
-                    if (!CruiseStatus)
+                    if (IRConnectStatus && TVConnectStatus >0 && Convert.ToInt32(cruiseCtrl.CruiseStatus)<1)
                     {
                         #region 云台
                         if (job["cmdType"].ToString() == "2")  //PTZ
@@ -1059,13 +1072,12 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                             }
                         }
                         #endregion
-
                     }
 
                 }
                 catch(Exception e)
                 {
-                    Debug.WriteLine("异常信息:" + e.Message);
+                    Debug.WriteLine("json命令解析异常信息:" + e.Message);
                 }
                 
             }
@@ -1084,12 +1096,12 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 if (FtpUtil.Connect(rootDirectory, ftp_username, ftp_password))
                 {
                     FtpStatus = true;
-                    Debug.WriteLine("ftp连接成功...");
+                   // Debug.WriteLine("ftp连接成功...");
                 }
                 else
                 {
                     FtpStatus = false;
-                    Debug.WriteLine("ftp连接失败...");
+                   // Debug.WriteLine("ftp连接失败...");
                 }
             }
             catch(Exception e)
@@ -1127,53 +1139,34 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 
         public void CruiseSetUp()
         {
-            Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            Debug.WriteLine("巡检状态:" + CruiseStatus);
-            if (CruiseStatus)
+            while (true)
             {
-                CruiseObj cruiseObj = new CruiseObj();
-                cruiseObj.StartTime = StartCruiseTime;
-                cruiseObj.CruiseTime = 1;
-
-                cruiseObj.Interval = 1;
-                cruiseObj.CruiseType = 0;
-
-
-                cruiseObj.CruiseType = 1;
-                DateTime date1 = DateTime.Parse("2019-12-02 14:37:58");
-                DateTime date2 = DateTime.Parse("2019-12-02 15:38:58");
-                DateTime date3 = DateTime.Parse("2019-12-02 15:39:58");
-                List<DateTime> dateTimes = new List<DateTime>();
-                dateTimes.Add(date1);
-                dateTimes.Add(date2);
-                dateTimes.Add(date3);
-                cruiseObj.dateTimeList = dateTimes;
-
-                DateTime currentTime = DateTime.Now;  
-                if (cruiseObj.CruiseType == 0)  //隔时巡检
+                
+                //IRScanState() && TVScanState() > 0 &&
+                if (StartCruiseTime.CompareTo(DateTime.Parse("1970-01-01 00:00:00")) != 0)
                 {
-                   if((DateUtil.GetSumMinutes(currentTime)-(DateUtil.GetSumMinutes(cruiseObj.StartTime) + cruiseObj.CruiseTime))%cruiseObj.Interval==0)
-                    {
-                        /// goto 巡检操作
-                        Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                        Debug.WriteLine("提示:开始执行隔时巡检操作");
-                    }
-                }
-                if (cruiseObj.CruiseType == 1)  //定时巡检
-                {
-                    foreach(DateTime dt in cruiseObj.dateTimeList) 
-                    {
-                        if (DateUtil.GetSumMinutes(currentTime) == DateUtil.GetSumMinutes(dt))
-                        {
-                            /// goto 巡检操作
-                            Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                            Debug.WriteLine("提示:开始执行定时巡检操作");
+                    //测试数据
+                    CruiseObj cruiseObj = new CruiseObj();
+                    cruiseObj.StartTime = StartCruiseTime;
+                    cruiseObj.CruiseTime = 2;
+                    cruiseObj.Interval = 3;
+                    cruiseObj.CruiseType = 0;
 
-                        }
-                    }
-                }
+                    //  cruiseObj.CruiseType = 1;
+                    DateTime date1 = DateTime.Parse("2019-12-02 15:50:58");
+                    DateTime date2 = DateTime.Parse("2019-12-02 15:53:58");
+                    DateTime date3 = DateTime.Parse("2019-12-02 15:56:58");
+                    List<DateTime> dateTimes = new List<DateTime>();
+                    dateTimes.Add(date1);
+                    dateTimes.Add(date2);
+                    dateTimes.Add(date3);
+                    cruiseObj.dateTimeList = dateTimes;
 
+                    cruiseCtrl.StartCruise(irCtrl, tvCtrl, cruiseObj);
+                }
+                Thread.Sleep(60 * 1000);
             }
+           
            
 
         }

@@ -74,15 +74,36 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 else
                 {
                     MessageBox.Show("请检查网络,服务器ip和监控端ip是否在同一网关","提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                }
-               
+                }   
             }
             else
             {
                 MessageBox.Show("ini文件读取失败,请检查...", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
             }
-          
-            Server_timer.Enabled = true;
+           
+
+            Thread thread_server = new Thread(ProxyScan);   //服务器
+            thread_server.Start();
+
+            Thread thread_heatbeat = new Thread(M_ClientOpt.SendHeartBeatCmd);
+            thread_heatbeat.Start();
+
+            Thread thread_monDev_IR = new Thread(M_ClientOpt.IRStatusScan);    //红外状态监控
+            thread_monDev_IR.Start();
+
+            Thread thread_monDev_TV = new Thread(M_ClientOpt.TVStatusScan);    //可见光状态监控
+            thread_monDev_TV.Start();
+
+            Thread thread_monDev_FTP = new Thread(M_ClientOpt.FtpStatusScan);   //ftp服务器状态监控
+            thread_monDev_FTP.Start();
+
+            Thread thread_monDev_SQL = new Thread(M_ClientOpt.SqlStatusScan);  //数据库状态监控
+            thread_monDev_SQL.Start();
+
+            //Thread thread_cruise = new Thread(M_ClientOpt.CruiseStatusScan);    //巡检
+            //thread_cruise.Start();
+
+            
             
 
         }
@@ -222,7 +243,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             if (!M_ClientOpt.StartHeartBeat)
             {
                 M_ClientOpt.StartHeartBeat = true;
-                heartBeat_timer.Enabled = true;     //登录成功启动心跳    
+               
             }
         }
 
@@ -302,87 +323,56 @@ namespace Peiport_pofessionalMonitorDeviceClient
         {
         }
 
-        private void devStatus_timer_Tick(object sender, EventArgs e)    //可见光,红外连接状态扫描
-        {
-            M_ClientOpt.DevStatusScan();
-            
-        }
-
-        private void heartBeat_timer_tick(object sender, EventArgs e)     //定时发送心跳命令,心跳状态检测
-        {
-            //M_ClientOpt.SendHeartBeatCmd();
-            //Thread.Sleep(100);
-            //M_ClientOpt.HeartBeatStatusScan();
-
-        }
-
         int connectServerCount = 0;
-        private void Server_timer_Tick(object sender, EventArgs e)     //服务器连接状态,用户登录状态,心跳检测
-        {
-            Thread th = new Thread(ProxyScan);
-            th.Start();
-            M_ClientOpt.funbutLoginStatus();
-
-
-        }
-
-        private void cruise_timer_Tick(object sender, EventArgs e)      //巡检状态定时扫描
-        {
-            // Debug.WriteLine("巡检状态:" + M_ClientOpt.CruiseStatusScan());
-            //if (M_ClientOpt.CruiseStatusScan())
-            //{
-            //    MessageBox.Show("系统正在巡检,请停止巡检后在进行操作...");
-            //}
-            M_ClientOpt.CruiseStatusScan();
-
-        }
+       
 
         public void ProxyScan()
         {
-            Debug.WriteLine("socket状态:" + M_ClientOpt.GetSocketState()+",服务器连接状态:" + M_ClientOpt.Pjson.OptJsonQuestConnectStatus() + ",用户登录状态:" + M_ClientOpt.LoginStatus + ",心跳检测状态:" + M_ClientOpt.StartHeartBeat);
-          if(!M_ClientOpt.GetSocketState())
-            {              
-                M_ClientOpt.LoginStatus = false;            
-                string ip = INIUtil.Read("Server", "ip", Constant.IniFilePath);
-                string port = INIUtil.Read("Server", "port", Constant.IniFilePath);
-                M_ClientOpt.funEnterMonitorServerPar(ip, Convert.ToInt32(port));
-                M_ClientOpt.funSetupMonitorServer();
-                M_ClientOpt.funbutLoginStatus();
-                connectServerCount++;
-                if (connectServerCount > 20)
+            while (true)
+            {
+                Thread.Sleep(1500);
+                Debug.WriteLine(">>>>>>>>>>>>>>>>>>>服务器状态监控线程:" + Thread.CurrentThread.Name + ";socket状态:" + M_ClientOpt.GetSocketState() + ",服务器连接状态:" + M_ClientOpt.Pjson.OptJsonQuestConnectStatus() + ",用户登录状态:" + M_ClientOpt.GetLoginStatus() + ",心跳检测状态:" + M_ClientOpt.StartHeartBeat);
+                if (!M_ClientOpt.GetSocketState())
+                {
+                    M_ClientOpt.SetLoginStatus();
+                    string ip = INIUtil.Read("Server", "ip", Constant.IniFilePath);
+                    string port = INIUtil.Read("Server", "port", Constant.IniFilePath);
+                    M_ClientOpt.funEnterMonitorServerPar(ip, Convert.ToInt32(port));
+                    M_ClientOpt.funSetupMonitorServer();
+                    M_ClientOpt.funbutLoginStatus();
+                    connectServerCount++;
+                    if (connectServerCount > 20)
+                    {
+                        connectServerCount = 0;
+                        MessageBox.Show("重连服务器失败,请检查服务器是否正常", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    }
+                }
+                else
                 {
                     connectServerCount = 0;
-                    MessageBox.Show("重连服务器失败,请检查服务器是否正常", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 }
-            }
-            else
-            {
-                connectServerCount = 0;
-            }
 
-            if (!M_ClientOpt.LoginStatus)
-            {
-                string username = INIUtil.Read("USER", "username", Constant.IniFilePath);
-                string password = INIUtil.Read("USER", "password", Constant.IniFilePath);
-                M_ClientOpt.funOptbtuUser(username, password);
+                if (!M_ClientOpt.LoginStatus)
+                {
+                    string username = INIUtil.Read("USER", "username", Constant.IniFilePath);
+                    string password = INIUtil.Read("USER", "password", Constant.IniFilePath);
+                    M_ClientOpt.funOptbtuUser(username, password);
+                    M_ClientOpt.funbutLoginStatus();
+
+                    M_ClientOpt.StartHeartBeat = false;
+                }
+                else
+                {
+                    M_ClientOpt.StartHeartBeat = true;
+                }
                 M_ClientOpt.funbutLoginStatus();
-
-                M_ClientOpt.StartHeartBeat = false;
             }
-            else
-            {
-                M_ClientOpt.StartHeartBeat = true;
-            }
+           
         }
 
         private void cmdRevMsg_timer_Tick(object sender, EventArgs e)  //定时接收服务信息
         {
             M_ClientOpt.funMonitorServerReceiCmdDealScan();
-        }
-
-        private void showMsg_timer_Tick(object sender, EventArgs e)  //界面显示接收到的消息
-        {
-
         }
     }
 }

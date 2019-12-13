@@ -11,7 +11,6 @@ namespace PTiIRMonitor_MonitorDeviceModule.entities
         public DateTime StartTime { get; set; } //开始时间
         public int Interval { get; set; }  //隔时时长
         public List<DateTime> dateTimeList { get; set; }  //定时时间对象集合
-        public int CruiseTime { get; set; }  //巡检时长
-
+        public int CruiseTime { get; set; }  //巡检时长  
     }
 }
