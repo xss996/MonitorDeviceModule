@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Collections;
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 namespace Peiport_pofessionalMonitorDeviceClient
 {
     public class clsOneMonOptFun
@@ -45,7 +41,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
         public int funIninumber_ID()//启动监控头
         {
             clsINIFileOP op = new clsINIFileOP(Application.StartupPath + "\\Monitor.ini");
-          //  ProcessStartInfo psInfo = new ProcessStartInfo(@"E:\IR\变电站无人值守系统\变电站无人值守系统\PTiIRMonitor_MonitorManagerApp\bin\Debug\PTiIRMonitor_MonitorManagerApp.exe");
+            //  ProcessStartInfo psInfo = new ProcessStartInfo(@"E:\IR\变电站无人值守系统\变电站无人值守系统\PTiIRMonitor_MonitorManagerApp\bin\Debug\PTiIRMonitor_MonitorManagerApp.exe");
 
             try
             {
@@ -53,16 +49,16 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 if ((1 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceNumber1"))) && (0 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceCondition1"))))//判断一号的监控头是否已经启动
                 {
                     op.WriteKeyValue("Device1", "DeviceCondition1", 1.ToString());//给一号监控头写入状态1表示在线0表示下线
-                    //Process[] pcs = Process.GetProcesses();
-                    //foreach (Process p in pcs)
-                    //{
-                    //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
-                    //    {
-                    //        p.StartInfo = psInfo;
-                    //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
-                    //        int data = Convert.ToInt32(11); //发送11,表示窗口已经打开
-                    //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
-                            inID = 1;
+                                                                                  //Process[] pcs = Process.GetProcesses();
+                                                                                  //foreach (Process p in pcs)
+                                                                                  //{
+                                                                                  //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
+                                                                                  //    {
+                                                                                  //        p.StartInfo = psInfo;
+                                                                                  //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
+                                                                                  //        int data = Convert.ToInt32(11); //发送11,表示窗口已经打开
+                                                                                  //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
+                    inID = 1;
                     //        Thread.Sleep(4000);
                     //    }
                     //}
@@ -71,16 +67,16 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 else if ((2 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceNumber2"))) && (0 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceCondition2"))))
                 {
                     op.WriteKeyValue("Device1", "DeviceCondition2", 1.ToString());//给二号监控头写入状态1表示在线0表示下线
-                    //Process[] pcs = Process.GetProcesses();
-                    //foreach (Process p in pcs)
-                    //{
-                    //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
-                    //    {
-                    //        p.StartInfo = psInfo;
-                    //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
-                    //        int data = Convert.ToInt32(13); //发送13,表示二号窗口已经打开
-                    //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
-                            inID = 2;
+                                                                                  //Process[] pcs = Process.GetProcesses();
+                                                                                  //foreach (Process p in pcs)
+                                                                                  //{
+                                                                                  //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
+                                                                                  //    {
+                                                                                  //        p.StartInfo = psInfo;
+                                                                                  //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
+                                                                                  //        int data = Convert.ToInt32(13); //发送13,表示二号窗口已经打开
+                                                                                  //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
+                    inID = 2;
                     //        Thread.Sleep(4000);
                     //    }
                     //}
@@ -89,16 +85,16 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 else if ((3 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceNumber3"))) && (0 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceCondition3"))))
                 {
                     op.WriteKeyValue("Device1", "DeviceCondition3", 1.ToString());//给三号监控头写入状态1表示在线0表示下线
-                    //Process[] pcs = Process.GetProcesses();
-                    //foreach (Process p in pcs)
-                    //{
-                    //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
-                    //    {
-                    //        p.StartInfo = psInfo;
-                    //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
-                    //        int data = Convert.ToInt32(15); //发送15,表示窗口已经打开
-                    //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
-                            inID = 3;
+                                                                                  //Process[] pcs = Process.GetProcesses();
+                                                                                  //foreach (Process p in pcs)
+                                                                                  //{
+                                                                                  //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
+                                                                                  //    {
+                                                                                  //        p.StartInfo = psInfo;
+                                                                                  //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
+                                                                                  //        int data = Convert.ToInt32(15); //发送15,表示窗口已经打开
+                                                                                  //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
+                    inID = 3;
                     //        Thread.Sleep(4000);
                     //    }
                     //}
@@ -107,17 +103,17 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 else if ((4 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceNumber4"))) && (0 == Convert.ToInt32(op.ReadKeyValue("Device1", "DeviceCondition4"))))
                 {
                     op.WriteKeyValue("Device1", "DeviceCondition4", 1.ToString());//给四号监控头写入状态1表示在线 0表示下线
-                    //Process[] pcs = Process.GetProcesses();
-                    //foreach (Process p in pcs)
-                    //{
-                    //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
-                    //    {
+                                                                                  //Process[] pcs = Process.GetProcesses();
+                                                                                  //foreach (Process p in pcs)
+                                                                                  //{
+                                                                                  //    if (p.ProcessName == "PTiIRMonitor_MonitorManagerApp")
+                                                                                  //    {
 
                     //        p.StartInfo = psInfo;
                     //        IntPtr hWnd = p.MainWindowHandle; //获取看门狗.exe主窗口句柄
                     //        int data = Convert.ToInt32(17); //发送17,表示窗口已经打开
                     //        SendMessage(hWnd, 0x0100, (IntPtr)data, (IntPtr)0); //发送消息
-                            inID = 4;
+                    inID = 4;
                     //        Thread.Sleep(4000);
                     //    }
                     //}

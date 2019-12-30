@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -8,7 +6,7 @@ using System.Text;
 
 namespace PTiIRMonitor_MonitorDeviceModule.util
 {
-   public class TelnetUtil
+    public class TelnetUtil
     {
         private TelnetUtil() { }
 
@@ -51,11 +49,11 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
 
         #endregion 方法二
 
-      //  判断Socket是否连接上，需要通过发包来确认。
-//之前确认都是调用调用socket的connected属性，然而该属性是上次的连接是否成功的结果,不及时。
+        //  判断Socket是否连接上，需要通过发包来确认。
+        //之前确认都是调用调用socket的connected属性，然而该属性是上次的连接是否成功的结果,不及时。
 
 
-// 检查一个Socket是否可连接
+        // 检查一个Socket是否可连接
         public static bool IsSocketConnected(Socket client)
         {
             bool blockingState = client.Blocking;

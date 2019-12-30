@@ -1,13 +1,10 @@
-﻿using System;
+﻿using PTiIRMonitor_MonitorDeviceModule.ctrl;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net.Sockets;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Windows.Forms;
-using PTiIRMonitor_MonitorDeviceModule.ctrl;
-using System.Diagnostics;
 
 namespace Peiport_pofessionalMonitorDeviceClient
 {
@@ -69,7 +66,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
         }
         public void funSetupMonitorServer()   //启动，只接供启动变量，不对启动进行监管
         {
-           // Pjson.clsClJsonCrcVarInit();
+            // Pjson.clsClJsonCrcVarInit();
             Pjson.OptJsonConnectServer();
         }
         public void funStopMonitorServer()  // 停止，只接供停止变量，不对内部进行控制
@@ -94,7 +91,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
         public void funOptbtuUser(string name, string password) //登录
         {
             Pjson.clsClJsonCrcVarInit();
-           // Pjson.OptJsonLogin(name, password);
+            // Pjson.OptJsonLogin(name, password);
             string strjson = globalCtrl.sysCtrl.UserLogin(name, password);
             Pjson.funSendOneFramCmd(strjson);
             Pjson.funCheckStaus(true, 100);
@@ -118,11 +115,11 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }
             if (Pjson.m_stuSystemVar.intLoginStatus > 0)
             {
-              //  LoginStatus = true;
+                //  LoginStatus = true;
             }
             else
             {
-              //  LoginStatus = false;
+                //  LoginStatus = false;
             }
         }
         public void funSendToUserOneStrCmd(string strCmd) //发送信息
@@ -130,7 +127,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             Pjson.funSendOneFramCmd(strCmd);
             //if (bl_MonitorClientControlSetup == true)
             //{
-                
+
             //    return 0;
             //}
             //else
@@ -155,7 +152,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 intHeartCount++;
                 if (intHeartCount > 60)
                 {
-                  //  Pjson.funCmdJson_Palpitate(struser);//发送心跳命令
+                    //  Pjson.funCmdJson_Palpitate(struser);//发送心跳命令
                     Application.DoEvents();
                     Thread.Sleep(1000);
                     if (Pjson.m_stuSystemVar.intPalpitate == 1)
@@ -198,7 +195,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
         public void funMonitorServerReceiCmdDealScan() //定时扫描处理接收到的命令 ，返回结果扫印在接收文本框内
         {
             Pjson.funReceiCmdAnalyseScan(globalCtrl);
-        }     
+        }
 
         public bool GetSocketState()
         {
@@ -219,7 +216,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
         public void SendHeartBeatCmd()   //发送心跳命令
         {
             while (true)
-            { 
+            {
                 if (StartHeartBeat)
                 {
                     string strjson = globalCtrl.sysCtrl.SendHeartbeatCmd();
@@ -227,7 +224,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 }
                 Thread.Sleep(3500);
             }
-           
+
         }
 
         public void HeartBeatStatusScan()
@@ -235,22 +232,22 @@ namespace Peiport_pofessionalMonitorDeviceClient
             if (StartHeartBeat)
             {
                 Debug.WriteLine("心跳检测次数:" + globalCtrl.HeartBeatCount);
-            }    
+            }
         }
 
         public void CruiseStatusScan()
         {
             while (true)
             {
-                Thread.Sleep(60*1000); 
-                Debug.WriteLine("***********************************************************************************巡检线程启动:"+Thread.CurrentThread.Name);
+                Thread.Sleep(60 * 1000);
+                Debug.WriteLine("***********************************************************************************巡检线程启动:" + Thread.CurrentThread.Name);
                 globalCtrl.CruiseSetUp();
             }
         }
         #endregion
 
 
-        int i = 0;
+        // int i = 0;
         int TVReConnectCount = 0;
         int IRReConnectCount = 0;
         int FtpReConnnectCount = 0;
@@ -265,33 +262,13 @@ namespace Peiport_pofessionalMonitorDeviceClient
             globalCtrl.GetFtpConnect();
             globalCtrl.GetSqlConnection();
         }
-        public void MonDevStatusScan()
-        {
-            // IRStatusScan();
-            // TVStatusScan();
-            //FtpStatusScan();
-            //SqlStatusScan();
-            //Thread th = new Thread(IRStatusScan);
-            //th.Start();
 
-            //Thread th2 = new Thread(TVStatusScan);
-            //th2.Start();
 
-            //Thread th3 = new Thread(FtpStatusScan);
-            //th3.Start();
-
-            //Thread th4 = new Thread(SqlStatusScan);
-            //th4.Start();
-            
-
-        }
-
-       
         public void IRStatusScan()
         {
             while (true)
             {
-                
+
                 Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>红外状态监控线程:" + Thread.CurrentThread.Name + ";红外连接状态:" + globalCtrl.IRScanState());
                 if (!globalCtrl.IRScanState())
                 {
@@ -303,15 +280,15 @@ namespace Peiport_pofessionalMonitorDeviceClient
                     IRReConnectCount = 0;
                 }
                 Thread.Sleep(3000);
-            }                 
+            }
         }
 
         public void TVStatusScan()
         {
             while (true)
             {
-                
-                Debug.WriteLine(">>>>>>>>>>>>>>>>可见光状态监控线程:"+Thread.CurrentThread.Name+";可见光连接状态:" + globalCtrl.TVScanState());
+
+                Debug.WriteLine(">>>>>>>>>>>>>>>>可见光状态监控线程:" + Thread.CurrentThread.Name + ";可见光连接状态:" + globalCtrl.TVScanState());
                 if (globalCtrl.TVScanState() < 1)
                 {
                     TVReConnectCount++;
@@ -323,27 +300,28 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 }
                 Thread.Sleep(3000);
             }
-               
-            
-            
+
+
+
         }
 
         public void FtpStatusScan()
         {
-            while (true)
-            { 
-                Debug.WriteLine(">>>>>>>>>>>>>>>>FTP状态监控线程:" + Thread.CurrentThread.Name + ";Ftp连接状态:" + globalCtrl.FtpStatus);
-                if (!globalCtrl.FtpStatus)
-                {
-                    FtpReConnnectCount++;
-                    globalCtrl.GetFtpConnect();
-                }
-                else
-                {
-                    FtpReConnnectCount = 0;
-                }
-                Thread.Sleep(4000);
-            }          
+            //while (true)
+            //{
+            //    Debug.WriteLine(">>>>>>>>>>>>>>>>FTP状态监控线程:" + Thread.CurrentThread.Name + ";Ftp连接状态:" + globalCtrl.FtpStatus);
+            //    globalCtrl.GetFtpConnect();
+            //    if (!globalCtrl.FtpStatus)
+            //    {
+            //        FtpReConnnectCount++;
+            //        globalCtrl.GetFtpConnect();
+            //    }
+            //    else
+            //    {
+            //        FtpReConnnectCount = 0;
+            //    }
+            //    Thread.Sleep(4000);
+            //}
         }
 
         public void SqlStatusScan()
@@ -351,6 +329,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             while (true)
             {
                 Debug.WriteLine(">>>>>>>>>>>>>>>>Database状态监控线程:" + Thread.CurrentThread.Name + ";数据库状态:" + globalCtrl.DatabaseStatus);
+                globalCtrl.GetSqlConnection();
                 if (!globalCtrl.DatabaseStatus)
                 {
                     SqlReconnectCount++;

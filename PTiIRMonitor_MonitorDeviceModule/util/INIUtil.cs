@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 
 namespace PTiIRMonitor_MonitorDeviceModule.util
 {
-   public class INIUtil
+    public class INIUtil
     {
         private INIUtil()
         {
@@ -37,7 +34,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
         private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retval, int size, string filePath);
 
         #region 二次封装
-        public static string Read(string section, string key,string filePath)
+        public static string Read(string section, string key, string filePath)
         {
             StringBuilder sb = new StringBuilder();
             GetPrivateProfileString(section, key, "", sb, 1024, filePath);

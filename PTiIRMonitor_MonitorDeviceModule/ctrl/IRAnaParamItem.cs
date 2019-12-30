@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace PTiIRMonitor_MonitorDeviceModule.ctrl
+﻿namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 {
-   public class IRAnaParamItem
+    public class IRAnaParamItem
     {
         public int uNO { get; set; }
         public bool uActive { get; set; }

@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 
@@ -22,9 +20,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 
         public bool IRConnectStatus = false;
         IRTelnetCtrl telnetCtrl;
-        string IP;
-        int port;
-        int TimeOut = 50;
+        public string IP;
+        public int port;
+        public int TimeOut = 50;
 
         List<IRTelnetCtrl.SpotInfo> spotInfoList = new List<IRTelnetCtrl.SpotInfo>();
         List<IRTelnetCtrl.LineInfo> lineInfoList = new List<IRTelnetCtrl.LineInfo>();
@@ -36,7 +34,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// </summary>
         public void Init()
         {
-            MySqlConnection conn = null ;
+            MySqlConnection conn = null;
             try
             {
                 string ip = INIUtil.Read("DATABASE", "ip", Constant.IniFilePath);
@@ -47,7 +45,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 
                 conn = SqlHelper.GetConnection(ip, Convert.ToInt32(strPort), username, password, databaseName);
 
-                string MonDev_Index = INIUtil.Read("Monitor", "Index", Constant.IniFilePath);
+                string MonDev_Index = INIUtil.Read("MonDev", "Index", Constant.IniFilePath);
                 string strSql = "select * from base_videoserver where MonDev_Index = " + MonDev_Index;
                 DataTable data = SqlHelper.QueryData(conn, strSql, null);
 
@@ -58,7 +56,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 }
                 telnetCtrl = new IRTelnetCtrl(IP, port, TimeOut);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -71,8 +69,8 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// 连接红外
         /// </summary>
         public bool Connect()
-        {                    
-            return telnetCtrl.ConnectIRTelnet();    
+        {
+            return telnetCtrl.ConnectIRTelnet();
         }
         /// <summary>
         /// 关闭连接
@@ -87,7 +85,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <returns></returns>
         public bool GetIRConnectStatus()
         {
-          return telnetCtrl.GetTelnetSta();    
+            return telnetCtrl.GetTelnetSta();
         }
 
         /// <summary>
@@ -95,15 +93,15 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// </summary>
         /// <param name="iOptType">类型:0.停止 ,1.焦距拉近 ,2.焦距拉远 ,3.自动聚焦</param>
         /// <param name="iSpeed">聚焦速度,取值范围>=0</param>
-        public bool SetManualFocus(int iOptType,int iSpeed=6)  
+        public bool SetManualFocus(int iOptType, int iSpeed = 6)
         {
-          return telnetCtrl.FocusOpt(iOptType, iSpeed);
-        }  
+            return telnetCtrl.FocusOpt(iOptType, iSpeed);
+        }
 
         public bool SetAutoFocus()
         {
-           return telnetCtrl.FocusOpt(3, 0);
-            
+            return telnetCtrl.FocusOpt(3, 0);
+
         }
         /// <summary>
         /// 设置红外聚焦位置
@@ -111,7 +109,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <param name="fValue"></param>
         public bool SetFocusPos(int fValue)
         {
-           return telnetCtrl.SetFocusPos(fValue);  
+            return telnetCtrl.SetFocusPos(fValue);
         }
         /// <summary>
         /// 获取红外聚焦位置
@@ -120,15 +118,36 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <returns></returns>
         public bool GetFocusPos(ref int iFocusOpt)
         {
-           return telnetCtrl.GetFocusPos(ref iFocusOpt);          
-            
+            return telnetCtrl.GetFocusPos(ref iFocusOpt);
+
         }
 
+        /// <summary>
+        /// 红外校正
+        /// </summary>
+        public void NucCheck()
+        {
+            telnetCtrl.NucCheck();
+        }
+
+        /// <summary>
+        /// level设置
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetLevel(double value)
+        {
+            telnetCtrl.SetLevel(value);
+        }
+
+        public void SetSpan(double value)
+        {
+            telnetCtrl.SetSpan(value);
+        }
 
         int palType = 0;
         public bool SetPalette()  //四种类型：WhiteHot/BlackHot/Iron/Rain
         {
-           
+
             if (telnetCtrl.SetPalette(palType))
             {
                 Debug.WriteLine(string.Format("当前面板设置为:{0}", palType));
@@ -143,7 +162,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             {
                 return false;
             }
-           
+
         }
 
         public void SetDigZoom(int value)     //值1,2,4
@@ -167,9 +186,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <param name="Auto">是否自动调节</param>
         /// <param name="Brightness">亮度</param>
         /// <param name="Contrast">透明度</param>
-        public bool SetImageAdjustMode(bool Auto,int Brightness, int Contrast)
+        public bool SetImageAdjustMode(bool Auto, int Brightness, int Contrast)
         {
-           return telnetCtrl.SetImageAdjustMode(Auto, Brightness, Contrast);   
+            return telnetCtrl.SetImageAdjustMode(Auto, Brightness, Contrast);
         }
 
         /// <summary>
@@ -178,9 +197,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <param name="fileName"></param>
         /// <returns></returns>
         public bool SaveIRHotImage(string fileName)
-        {        
+        {
             bool flag = telnetCtrl.SaveHotPic(fileName);
-            return flag;   
+            return flag;
         }
 
         /// <summary>
@@ -190,16 +209,26 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <returns></returns>
         public bool SaveVideoImage(string fileName)
         {
-           return telnetCtrl.SaveVisPic(fileName);            
+            return telnetCtrl.SaveVisPic(fileName);
         }
         #endregion
 
         #region 红外分析
 
         #region 参数设置
-        public void GetMeaParam(ref float fRefTemp, ref float fEnvTemp, ref float fRelHum, ref float fWinTemp, ref float fWinTrans, ref float fDist, ref float fEmis)
+        public bool GetMeaParam(ref float fRefTemp, ref float fEnvTemp, ref float fRelHum, ref float fWinTemp, ref float fWinTrans, ref float fDist, ref float fEmis)
         {
-            telnetCtrl.GetMeasurePara( ref fRefTemp,ref fEnvTemp,ref fRelHum,ref fWinTemp,ref fWinTrans,ref fDist,ref fEmis);
+            return telnetCtrl.GetMeasurePara(ref fRefTemp, ref fEnvTemp, ref fRelHum, ref fWinTemp, ref fWinTrans, ref fDist, ref fEmis);
+        }
+
+        public bool SetMeaParam(float refTemp, float envTemp, float hum, float winTemp, float winTrans, float dist, float emiss)
+        {
+            bool flag = false;
+            // Thread thread = new Thread(() =>
+            flag = telnetCtrl.SetMeasurePara(refTemp, envTemp, hum, winTemp, winTrans, dist, emiss);
+            //   thread.Start();
+            return flag;
+
         }
         public void SetEmissivity(double emiss)    //范围0.00-1.0
         {
@@ -272,20 +301,22 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 
         public void ClearAnaAll()
         {
-           telnetCtrl.ClearScreen();
+            Thread thread = new Thread(() => telnetCtrl.ClearScreen());
+            thread.Start();
+
         }
         #endregion
 
         #region 点温相关
-        public bool SetAnaSpotPos(int uNO, int SpotX, int SpotY,double fDist,double fEmiss)
-        {           
+        public bool SetAnaSpotPos(int uNO, int SpotX, int SpotY, double fDist, double fEmiss)
+        {
             IRTelnetCtrl.SpotInfo stuSpotInfo = new IRTelnetCtrl.SpotInfo();
-            stuSpotInfo.iSpotIndex =(short) uNO;
+            stuSpotInfo.iSpotIndex = (short)uNO;
             stuSpotInfo.iSpotX = SpotX;
             stuSpotInfo.iSpotY = SpotY;
             stuSpotInfo.fDist = fDist;
             stuSpotInfo.fEmiss = fEmiss;
-          
+
             if (telnetCtrl.SetSpotInfo(stuSpotInfo))
             {
                 if (spotInfoList.Count == 0)
@@ -324,14 +355,14 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             {
                 for (var i = 0; i < spotInfoList.Count; i++)
                 {
-                    if(spotInfoList[i].iSpotIndex == uNO)
+                    if (spotInfoList[i].iSpotIndex == uNO)
                     {
-                        spotInfo = spotInfoList[i];                     
+                        spotInfo = spotInfoList[i];
                     }
                 }
             }
             return spotInfo;
-            
+
         }
 
         public void SetAnaSpotParam(IRAnaParamItem paramObj)
@@ -345,25 +376,24 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             Debug.WriteLine("点温获取相关参数为:{0}", paramObj);
         }
 
-        public void GetAnaSpotTemp(int uNO)
+        public bool GetAnaSpotTemp(int uNO, ref double temp)
         {
-            double temp = 0;
-            telnetCtrl.GetSpotTempInfo(uNO, ref temp);
-            Debug.WriteLine("当前{0}编号的点温为:{1}", uNO,temp);
+            return telnetCtrl.GetSpotTempInfo(uNO, ref temp);
         }
         #endregion
         #region 线温相关
-        public void SetAnaLinePos(int uNO,int x1, int y1, int x2, int y2, double fDist, double fEmiss)
+        public bool SetAnaLinePos(int uNO, int x1, int y1, int x2, int y2, double fDist, double fEmiss)
         {
+            bool result = false;
             IRTelnetCtrl.LineInfo lineInfo = new IRTelnetCtrl.LineInfo();
-            lineInfo.iLineIndex =(short) uNO;
+            lineInfo.iLineIndex = (short)uNO;
             lineInfo.iLineX1 = x1;
             lineInfo.iLineY1 = y1;
             lineInfo.iLineX2 = x2;
             lineInfo.iLineY2 = y2;
             lineInfo.fDist = fDist;
             lineInfo.fEmiss = fEmiss;
-            
+
             if (telnetCtrl.SetLineInfo(lineInfo))
             {
                 if (lineInfoList.Count == 0)
@@ -386,13 +416,14 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                         lineInfoList.Add(lineInfo);
                     }
                 }
-                Debug.WriteLine("编号为{0}的线温位置设置成功", uNO);
+                result = true;
             }
             else
             {
-                Debug.WriteLine("编号为{0}的线温位置设置失败", uNO);
+                result = false;
             }
-            
+            return result;
+
         }
 
         public void GetAnaLinePos(int uNO)
@@ -405,7 +436,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                     if (lineInfoList[i].iLineIndex == uNO)
                     {
                         lineInfo = lineInfoList[i];
-                        Debug.WriteLine(string.Format("获取编号为{0}的线温坐标位置参数:({1},{2}),({3},{4})", lineInfo.iLineIndex,lineInfo.iLineX1,lineInfo.iLineY1,lineInfo.iLineX2,lineInfo.iLineY2));
+                        Debug.WriteLine(string.Format("获取编号为{0}的线温坐标位置参数:({1},{2}),({3},{4})", lineInfo.iLineIndex, lineInfo.iLineX1, lineInfo.iLineY1, lineInfo.iLineX2, lineInfo.iLineY2));
                         return;
                     }
                 }
@@ -423,30 +454,38 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             Debug.WriteLine("线温获取相关参数为:{0}", paramObj);
         }
 
-        public void GetAnaLineTemp(int uNO)
+        public Dictionary<string, object> GetAnaLineTemp(int uNO)
         {
             double maxTemp = -500;
             double minTemp = -500;
             double avgTemp = -500;
-            int  maxLineX = 0;
+            int maxLineX = 0;
             int maxLineY = 0;
 
 
             telnetCtrl.GetLineMaxTemp(uNO, ref maxTemp);
             telnetCtrl.GetLineAvgTemp(uNO, ref minTemp);
-            telnetCtrl.GetLineAvgTemp(uNO,ref avgTemp);
+            telnetCtrl.GetLineAvgTemp(uNO, ref avgTemp);
             telnetCtrl.GetLineMaxPosX(uNO, ref maxLineX);
             telnetCtrl.GetLineMaxPosY(uNO, ref maxLineY);
-            Debug.WriteLine("当前{0}编号的线温最大温度:{1},最低温度:{2},平均温度:{3},最高温度x坐标:{4}最高温度y坐标:{5}", uNO,maxTemp,minTemp,avgTemp,maxLineX,maxLineY);
+
+            Dictionary<string, object> dict = new Dictionary<string, Object>();
+            dict.Add("maxTemp", maxTemp);
+            dict.Add("minTemp", minTemp);
+            dict.Add("avgTemp", avgTemp);
+            dict.Add("maxLineX", maxLineX);
+            dict.Add("maxLineY", maxLineY);
+            return dict;
+            // Debug.WriteLine("当前{0}编号的线温最大温度:{1},最低温度:{2},平均温度:{3},最高温度x坐标:{4}最高温度y坐标:{5}", uNO,maxTemp,minTemp,avgTemp,maxLineX,maxLineY);
 
         }
 
         #endregion
         #region 矩形测温相关
-        public void SetAnaAreaPos(int uNO,int fStartX,int fStartY,int fWidth, int fHeight, double fDist, double fEmiss)
+        public void SetAnaAreaPos(int uNO, int fStartX, int fStartY, int fWidth, int fHeight, double fDist, double fEmiss)
         {
             IRTelnetCtrl.AreaInfo areaInfo = new IRTelnetCtrl.AreaInfo();
-            areaInfo.iAreaIndex =(short) uNO;
+            areaInfo.iAreaIndex = (short)uNO;
             areaInfo.iAreaX = fStartX;
             areaInfo.iAreaY = fStartY;
             areaInfo.iAreaW = fWidth;
@@ -495,12 +534,12 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                     if (areaInfoList[i].iAreaIndex == uNO)
                     {
                         areaInfo = areaInfoList[i];
-                        Debug.WriteLine(string.Format("获取编号为{0}的区域测温参数:x={1},y={2},w={3},h={4}", areaInfo.iAreaIndex, areaInfo.iAreaX, areaInfo.iAreaY,areaInfo.iAreaW,areaInfo.iAreaY));
+                        Debug.WriteLine(string.Format("获取编号为{0}的区域测温参数:x={1},y={2},w={3},h={4}", areaInfo.iAreaIndex, areaInfo.iAreaX, areaInfo.iAreaY, areaInfo.iAreaW, areaInfo.iAreaY));
                         return;
                     }
                 }
             }
- 
+
         }
 
         public void SetAnaAreaParam(IRAnaParamItem paramObj)
@@ -514,20 +553,30 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             Debug.WriteLine("矩形测温获取相关参数为:{0}", paramObj);
         }
 
-        public void GetAnaAreaTemp(int uNO)
+        public Dictionary<string, object> GetAnaAreaTemp(int uNO)
         {
             double maxTemp = -500;
             double minTemp = -500;
             double avgTemp = -500;
-            int maxAreaX = 0;
-            int maxAreaY = 0;
+            int maxAreaX = -1;
+            int maxAreaY = -1;
 
             telnetCtrl.GetAreaAvgTemp(uNO, ref avgTemp);
             telnetCtrl.GetAreaMaxPosX(uNO, ref maxAreaX);
             telnetCtrl.GetAreaMaxPosY(uNO, ref maxAreaY);
             telnetCtrl.GetAreaMaxTemp(uNO, ref maxTemp);
+            telnetCtrl.GetAreaMinTemp(uNO, ref minTemp);
 
-            Debug.WriteLine("当前{0}编号的区域测温最大温度:{1},最低温度:{2},平均温度:{3},最高温度x坐标:{4}最高温度y坐标:{5}", uNO, maxTemp, minTemp, avgTemp, maxAreaX, maxAreaY);
+            Dictionary<string, object> dict = new Dictionary<string, Object>();
+            dict.Add("maxTemp", maxTemp);
+            dict.Add("minTemp", minTemp);
+            dict.Add("avgTemp", avgTemp);
+            dict.Add("maxAreaX", maxAreaX);
+            dict.Add("maxAreaY", maxAreaY);
+
+            return dict;
+
+            // Debug.WriteLine("当前{0}编号的区域测温最大温度:{1},最低温度:{2},平均温度:{3},最高温度x坐标:{4}最高温度y坐标:{5}", uNO, maxTemp, minTemp, avgTemp, maxAreaX, maxAreaY);
 
         }
 

@@ -3,20 +3,16 @@ using Newtonsoft.Json.Linq;
 using PTiIRMonitor_MonitorDeviceModule.constant;
 using PTiIRMonitor_MonitorDeviceModule.entities;
 using PTiIRMonitor_MonitorDeviceModule.util;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
 namespace PTiIRMonitor_MonitorDeviceModule.ctrl
 {
-   public class SysCtrl
+    public class SysCtrl
     {
         public bool cruiseState = false;
 
         public string username;
-       
+
         public void Init()
         {
             string username = INIUtil.Read("USER", "username", Constant.IniFilePath);
@@ -25,7 +21,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         }
         public bool StartCruise(int setUp)
         {
-            if(setUp == 0)
+            if (setUp == 0)
             {
                 Debug.WriteLine("启动巡检...");
                 cruiseState = true;
@@ -38,7 +34,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             return cruiseState;
         }
 
-       
+
 
         public void ReStartMonDev(int No)
         {
@@ -57,7 +53,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             return JsonConvert.SerializeObject(jsonItem);
         }
 
-        public string UserLogin(string username,string password)
+        public string UserLogin(string username, string password)
         {
             JObject jobCmd = new JObject();
             jobCmd.Add(new JProperty("seq", DateUtil.DateToString()));
@@ -72,7 +68,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             jobbuf.Add(new JProperty("password", password));
             jarr.Add(jobbuf);
             jobCmd.Add(new JProperty("paramList", jarr));
-            return  JsonConvert.SerializeObject(jobCmd);
+            return JsonConvert.SerializeObject(jobCmd);
         }
     }
 }

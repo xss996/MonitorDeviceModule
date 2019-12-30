@@ -1,16 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Peiport.Monitor.IRTelnetCtrl;
 using PTiIRMonitor_MonitorDeviceModule.constant;
 using PTiIRMonitor_MonitorDeviceModule.entities;
 using PTiIRMonitor_MonitorDeviceModule.util;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace PTiIRMonitor_MonitorDeviceModule.ctrl
@@ -29,10 +25,10 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         public int HeartBeatCount = 0;
 
         //连接控制全局变量
-        bool TVConnectCtrl = false;
-        bool IRConnectCtrl = false;
-        bool PTZConnectCtrl = false;
-        bool CruiseCtrl = false;
+        //bool TVConnectCtrl = false;
+        //bool IRConnectCtrl = false;
+        //bool PTZConnectCtrl = false;
+        //bool CruiseCtrl = false;
 
         public SysCtrl sysCtrl = new SysCtrl();
         public TVCtrl tvCtrl = new TVCtrl();
@@ -47,19 +43,19 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// 初始化
         /// </summary>
         public void Init()
-        {          
+        {
             sysCtrl.Init();
-            irCtrl.Init();          
-            GetFtpConnect();  
+            irCtrl.Init();
+
         }
         #region 连接
         public bool TVConnect()
         {
-           return tvCtrl.Connect(true);
+            return tvCtrl.Connect(true);
         }
         public bool IRConnect()
-        {           
-           return irCtrl.Connect();
+        {
+            return irCtrl.Connect();
         }
         #endregion
         /// <summary>
@@ -68,8 +64,8 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         public void Exit()
         {
 
-        }       
-        
+        }
+
         /// <summary>
         /// 红外监控状态扫描
         /// </summary>
@@ -82,12 +78,12 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// </summary>
         public int TVScanState()
         {
-           
+
             if (tvCtrl.GetTVStatus() == -1)
             {
                 TVConnectStatus = -1;
             }
-            else if(tvCtrl.GetTVStatus() == 0)
+            else if (tvCtrl.GetTVStatus() == 0)
             {
                 TVConnectStatus = 0;
             }
@@ -104,7 +100,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <summary>
         /// 云台监控扫描
         /// </summary>
-      
+
         /// <summary>
         /// 自动巡检监控扫描
         /// </summary>
@@ -120,7 +116,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             string strJson = null;
             if (job != null)
             {
-               
+
                 if (job.Property("Server") != null)
                 {
                     return strJson;
@@ -196,21 +192,17 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                                         par1 = par.value;
                                     }
                                 }
-                                
+
                                 Thread thread_cruise = new Thread(CruiseSetUp);
                                 if (par1 == "0")
-                                {                                    
-                                   // sysCtrl.StartCruise(0);
-                                    cruiseCtrl.isStartCruise = true;
+                                {
+                                    cruiseCtrl.SetCruiseCtrl(true);
                                     StartCruiseTime = DateTime.Now;   //获取开始巡检时间
                                     thread_cruise.Start();
-                                    
                                 }
                                 else
                                 {
-                                    //sysCtrl.StartCruise(1);
-                                    cruiseCtrl.isStartCruise = false;
-                                    thread_cruise.Abort();
+                                    cruiseCtrl.SetCruiseCtrl(false);
                                 }
                             }
                         }
@@ -251,7 +243,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                     }
 
                     #endregion
-                    if (IRConnectStatus && TVConnectStatus >0 && Convert.ToInt32(cruiseCtrl.CruiseStatus)<1)
+                    if (IRConnectStatus && TVConnectStatus > 0 && Convert.ToInt32(cruiseCtrl.CruiseStatus) < 1)
                     {
                         #region 云台
                         if (job["cmdType"].ToString() == "2")  //PTZ
@@ -816,7 +808,15 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                             {
                                 if (job["paramList"] != null)
                                 {
-                                    irCtrl.GetAnaSpotTemp(Convert.ToInt32(job["paramList"][0]["uNO"]));
+                                    double temp = -1;
+                                    if (irCtrl.GetAnaSpotTemp(Convert.ToInt32(job["paramList"][0]["uNO"]), ref temp))
+                                    {
+                                        //result:"ok"
+                                    }
+                                    else
+                                    {
+                                        //result:"error"
+                                    }
                                 }
                             }
                             #endregion
@@ -1075,11 +1075,11 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                     }
 
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.WriteLine("json命令解析异常信息:" + e.Message);
                 }
-                
+
             }
             return strJson;
         }
@@ -1096,19 +1096,19 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 if (FtpUtil.Connect(rootDirectory, ftp_username, ftp_password))
                 {
                     FtpStatus = true;
-                   // Debug.WriteLine("ftp连接成功...");
+
                 }
                 else
                 {
                     FtpStatus = false;
-                   // Debug.WriteLine("ftp连接失败...");
+
                 }
             }
-            catch(Exception e)
+            catch (Exception ex)
             {
                 FtpStatus = false;
             }
-            
+
         }
 
         public void GetSqlConnection()
@@ -1126,7 +1126,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 DatabaseStatus = true;
                 Debug.WriteLine("数据库连接成功...");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 DatabaseStatus = false;
                 Debug.WriteLine("数据库连接失败...");
@@ -1141,7 +1141,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         {
             while (true)
             {
-                
+
                 //IRScanState() && TVScanState() > 0 &&
                 if (StartCruiseTime.CompareTo(DateTime.Parse("1970-01-01 00:00:00")) != 0)
                 {
@@ -1166,8 +1166,8 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 }
                 Thread.Sleep(60 * 1000);
             }
-           
-           
+
+
 
         }
 

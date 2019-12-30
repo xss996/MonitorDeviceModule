@@ -28,6 +28,7 @@ namespace PTiIRMonitor_MonitorManagerApp
             inPID = Pid;
             MonitorID = MonState;
         }
+
         public class stuMonServer  //服务器的相关ip
         {
             int inFormState;     //状态

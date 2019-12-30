@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using SocketClientTest;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.ComponentModel;
-using System.Reflection;
-using System.Resources;
-using System.Windows.Forms;
-using System.Security.Cryptography;
-using System.Deployment.Application;
 using PTiIRMonitor_MonitorDeviceModule.ctrl;
 using PTiIRMonitor_MonitorDeviceModule.util;
+using SocketClientTest;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Peiport_pofessionalMonitorDeviceClient
 {
@@ -95,7 +85,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
         List<byte> lstbt_ReByteBuf = new List<byte>();  //接收命令字节缓冲，内部使用
         public List<string> lsts_CmdStrBuf = new List<string>();//接收string类型命令
         public List<string> lsts_Cmduser = new List<string>();//存储用户
-       
+
         public bool funByteContentAnaToJsonObject(byte[] btBuf, ref JObject jobjRe)   //分解命令帧
         {
             bool blReFlag = false;
@@ -243,11 +233,11 @@ namespace Peiport_pofessionalMonitorDeviceClient
             {
                 while (true)
                 {
-                    
+
                     if (lststu_ReceiCmdBuf.Count > 0)
                     {
                         string str1;
-                        stuWholeCmdBuf mOneCmd = lststu_ReceiCmdBuf[0];                    
+                        stuWholeCmdBuf mOneCmd = lststu_ReceiCmdBuf[0];
                         lststu_ReceiCmdBuf.RemoveAt(0);
                         JObject job1 = mOneCmd.jobjOneContent;
                         string strer = job1["receiver"].ToString();
@@ -288,7 +278,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
                         {
                             funSendOneFramCmd(strJson);
                         }
-                      //  m_stuSystemVar.intLoginStatus = ctrl.LoginStatus;//用户登录成功
+                        //  m_stuSystemVar.intLoginStatus = ctrl.LoginStatus;//用户登录成功
                     }
                     else
                     {
@@ -298,8 +288,8 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("提示:命令解析回传过程中出错,异常信息:"+ex.Message);
-               // throw ex;
+                Debug.WriteLine("提示:命令解析回传过程中出错,异常信息:" + ex.Message);
+                // throw ex;
 
             }
             return;
@@ -313,19 +303,19 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 stuBf = funOneContentToBaseFrame(strjson);
                 byte[] strByte;
                 strByte = funOneBaseNumFrameToByteArray(stuBf);
-                string str2 = "发送命令";
-               // gLogWriter.WriteLog(str2, strjson);//写入日志
-               if(m_clsClient != null && m_clsClient.getConnectState())
+                //string str2 = "发送命令";
+                // gLogWriter.WriteLog(str2, strjson);//写入日志
+                if (m_clsClient != null && m_clsClient.getConnectState())
                 {
                     m_clsClient.SendToServer(strByte);
-                    flag =  true;
+                    flag = true;
                 }
             }
             catch (Exception ex)
             {
                 flag = false;
-                Debug.WriteLine("发送指令到服务器出错"+ex.Message);
-              //  throw e;
+                Debug.WriteLine("发送指令到服务器出错" + ex.Message);
+                //  throw e;
             }
             return flag;
         }
@@ -452,8 +442,8 @@ namespace Peiport_pofessionalMonitorDeviceClient
             funWaitForResult(true, 100);
         }
 
-     
-    
+
+
         #region 系统
 
         #region 仅对服务器操作
@@ -485,7 +475,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             funCheckStaus(true, 100);
         }
         #endregion
-       
+
         #region   对于服务器的连接
         public void m_clsClient_OnRecvMsg(object obj, Client.EventArgs_Recv e)
         {

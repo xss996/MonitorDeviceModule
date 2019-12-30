@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace PTiIRMonitor_MonitorDeviceModule.entities
+﻿namespace PTiIRMonitor_MonitorDeviceModule.entities
 {
-   public  class VideoServer
+    public class VideoServer
     {
         public int VideoServer_Index { get; set; }
         public int MonDev_Index { get; set; }

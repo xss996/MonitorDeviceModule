@@ -13,12 +13,18 @@ namespace PTiIRMonitor_MonitorManagerApp
     public class clsTreeView
     {
         public List<GlbMonitorVar> IniMonitor = new List<GlbMonitorVar>();
+        clsINIFileOP op = new clsINIFileOP(Application.StartupPath + "\\MonitorP.ini");
         public bool CmdServerState = false;  //服务器状态
-
+        public class stuCmdServer  //命令服务器
+        {
+            public string strName;    //
+            public string strCmd;    //命令服务器发送的心跳信息
+            public string strDateTime;   //发送的时间
+        }
+        public List<stuCmdServer> IniCmdServer = new List<stuCmdServer>();
         //启动命令服务器界面
         public bool ConnectServerIni()//
         {
-            clsINIFileOP op = new clsINIFileOP(Application.StartupPath + "\\MonitorP.ini");
             string strAddress;
             if (1 == Convert.ToInt32(op.ReadKeyValue("CmdServerToClient", "ServerNot")))//判断是否启动_1启动_0停止
             {
@@ -42,16 +48,9 @@ namespace PTiIRMonitor_MonitorManagerApp
                 return false;
             }
         }
-
-        //启动数据分析服务器
-        //关闭
-
-
-
         //启动ini配置多少个(多个)监控头
         public void MonitorDeviceIni()
         {
-            clsINIFileOP op = new clsINIFileOP(Application.StartupPath + "\\MonitorP.ini");
             string strAddress;
             int int1, ID, inType, Pid, MonitorState = 0;
             if (1 == Convert.ToInt32(op.ReadKeyValue("MonitorDeviceModule", "DeviceNot")))
@@ -90,7 +89,7 @@ namespace PTiIRMonitor_MonitorManagerApp
         //启动单个监控头
         public void MonintorDevice(string strName)
         {
-            clsINIFileOP op = new clsINIFileOP(Application.StartupPath + "\\MonitorP.ini");
+
             string strAddress;
             for (int i = 0; i < IniMonitor.Count; i++)
             {
@@ -126,6 +125,35 @@ namespace PTiIRMonitor_MonitorManagerApp
                 throw;
             }
         }
+        /////////////////////////////////////////////////////////////////////////////////////////
+
+        //启动心跳服务器
+        public List<string> lststrReceiCmd = new List<string>();
+        bool blReceiMsg = false;
+
+        //接收心跳命令,分析状态
+        //public void myServer_OnRecvMsg(object source, EventArgs_Recv e)
+        //{
+        //    //区分服务器心跳命令还是监控模块心跳命令........................
+        //    string strPalpitate = e.sRecvMsg;
+
+        //    if ((strPalpitate == "CmdServerStart") || (strPalpitate == "CmdServerStop"))//命令服务器
+        //    {
+        //        stuCmdServer stu = new stuCmdServer();
+        //        stu.strCmd = strPalpitate;
+        //        stu.strDateTime = DateTime.Now.ToString();
+        //        IniCmdServer.Add(stu);
+        //    }
+        //    else if ((strPalpitate == "") || (strPalpitate == "") || (strPalpitate == ""))//监控模块
+        //    {
+
+        //    }
+        //    else if ((strPalpitate == "DataAnalysisServerStart") || (strPalpitate == "DateAnalysisServerStop"))//数据分析服务器状态
+        //    {
+
+        //    }
+        //}
+
 
     }
 }

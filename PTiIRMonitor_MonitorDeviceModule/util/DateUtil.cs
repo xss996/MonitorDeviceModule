@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PTiIRMonitor_MonitorDeviceModule.util
 {
-   public class DateUtil
+    public class DateUtil
     {
         private DateUtil() { }
         /// <summary>
@@ -17,6 +14,15 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
             DateTime date = DateTime.Now;
             return date.ToString("yyyyMMddHHmmssfff");
         }
+        /// <summary>
+        /// 将日期转换成字符串
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static string DateToString(DateTime dateTime)
+        {
+            return dateTime.ToString("yyyyMMddHHmmssfff");
+        }
 
         /// <summary>
         /// 日期截取时分部分换算成总共多少分钟
@@ -25,7 +31,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
         /// <returns></returns>
         public static int GetSumMinutes(DateTime dateTime)
         {
-            if(dateTime != null)
+            if (dateTime != null)
             {
                 string strTime = dateTime.ToString("yyyyMMddHHmmssfff");
                 int hours = Convert.ToInt32(strTime.Substring(8, 2));
@@ -35,7 +41,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
             }
 
             return -1;
-            
+
         }
     }
 }

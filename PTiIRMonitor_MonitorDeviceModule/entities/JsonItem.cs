@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace PTiIRMonitor_MonitorDeviceModule.entities
 {
-   public  class JsonItem
+    public class JsonItem
     {
         public string seq { get; set; }
         public int cmdType { get; set; }
@@ -17,7 +14,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.entities
 
     }
 
-  public class JsonitemParam
+    public class JsonitemParam
     {
         public string param { get; set; }
         public string value { get; set; }

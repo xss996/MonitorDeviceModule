@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 
 namespace PTiIRMonitor_MonitorDeviceModule.util
 {
@@ -29,12 +27,13 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
             MySqlConnection connenction = null;
             try
             {
-               connenction = new MySqlConnection(connectStr);
-            }catch(Exception e)
+                connenction = new MySqlConnection(connectStr);
+            }
+            catch (Exception ex)
             {
                 connenction = null;
             }
-            
+
             return connenction;
 
         }
@@ -51,7 +50,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
                 string connectStr = "server =" + ip + "; port =" + port + "; user =" + username + "; password =" + password + " ;database =" + database + ";;CharSet=gb2312;Allow User Variables=True";
                 connenction = new MySqlConnection(connectStr);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 connenction = null;
             }
@@ -76,7 +75,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
                     cmd.Parameters.AddRange(parameter);
                 }
 
-               // MySqlDataReader reader = cmd.ExecuteReader();
+                // MySqlDataReader reader = cmd.ExecuteReader();
                 MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
