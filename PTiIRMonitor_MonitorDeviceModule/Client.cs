@@ -155,5 +155,29 @@ namespace Peiport_pofessionalMonitorDeviceClient
         {
             return ClientSocket.Connected;
         }
+
+        public bool IsSocketConnected(Socket client)
+        {
+            bool blockingState = ClientSocket.Blocking;
+            try
+            {
+                byte[] tmp = new byte[1];
+                ClientSocket.Blocking = false;
+                ClientSocket.Send(tmp, 0, 0);
+                return true;
+            }
+            catch (SocketException e)
+            {
+                // 产生 10035 == WSAEWOULDBLOCK 错误，说明被阻止了，但是还是连接的
+                if (e.NativeErrorCode.Equals(10035))
+                    return false;
+                else
+                    return true;
+            }
+            finally
+            {
+                client.Blocking = blockingState;    // 恢复状态
+            }
+        }
     }
 }

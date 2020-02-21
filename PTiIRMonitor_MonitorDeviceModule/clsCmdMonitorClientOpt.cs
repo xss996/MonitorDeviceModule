@@ -226,22 +226,14 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }
 
         }
-
-        public void HeartBeatStatusScan()
-        {
-            if (StartHeartBeat)
-            {
-                Debug.WriteLine("心跳检测次数:" + globalCtrl.HeartBeatCount);
-            }
-        }
-
+    
         public void CruiseStatusScan()
         {
             while (true)
             {
                 Thread.Sleep(60 * 1000);
                 Debug.WriteLine("***********************************************************************************巡检线程启动:" + Thread.CurrentThread.Name);
-                globalCtrl.CruiseSetUp();
+              //  globalCtrl.CruiseSetUp();
             }
         }
         #endregion
@@ -260,7 +252,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             globalCtrl.TVConnect();
             globalCtrl.IRConnect();
             globalCtrl.GetFtpConnect();
-            globalCtrl.GetSqlConnection();
+            globalCtrl.GetSqlConnectionStatus();
         }
 
 
@@ -307,33 +299,31 @@ namespace Peiport_pofessionalMonitorDeviceClient
 
         public void FtpStatusScan()
         {
-            //while (true)
-            //{
-            //    Debug.WriteLine(">>>>>>>>>>>>>>>>FTP状态监控线程:" + Thread.CurrentThread.Name + ";Ftp连接状态:" + globalCtrl.FtpStatus);
-            //    globalCtrl.GetFtpConnect();
-            //    if (!globalCtrl.FtpStatus)
-            //    {
-            //        FtpReConnnectCount++;
-            //        globalCtrl.GetFtpConnect();
-            //    }
-            //    else
-            //    {
-            //        FtpReConnnectCount = 0;
-            //    }
-            //    Thread.Sleep(4000);
-            //}
+            while (true)
+            {
+                Debug.WriteLine(">>>>>>>>>>>>>>>>FTP状态监控线程:" + Thread.CurrentThread.Name + ";Ftp连接状态:" + globalCtrl.GetFtpConnectStatus());               
+                if (!globalCtrl.GetFtpConnectStatus())
+                {
+                    FtpReConnnectCount++;
+                    globalCtrl.GetFtpConnect();
+                }
+                else
+                {
+                    FtpReConnnectCount = 0;
+                }
+                Thread.Sleep(4000);
+            }
         }
 
         public void SqlStatusScan()
         {
             while (true)
             {
-                Debug.WriteLine(">>>>>>>>>>>>>>>>Database状态监控线程:" + Thread.CurrentThread.Name + ";数据库状态:" + globalCtrl.DatabaseStatus);
-                globalCtrl.GetSqlConnection();
-                if (!globalCtrl.DatabaseStatus)
+                Debug.WriteLine(">>>>>>>>>>>>>>>>数据库状态监控线程:" + Thread.CurrentThread.Name + ";数据库状态:" + globalCtrl.GetSqlConnectionStatus());              
+                if (!globalCtrl.GetSqlConnectionStatus())
                 {
                     SqlReconnectCount++;
-                    globalCtrl.GetSqlConnection();
+                    GlobalCtrl.GetSqlConnection();
                 }
                 else
                 {

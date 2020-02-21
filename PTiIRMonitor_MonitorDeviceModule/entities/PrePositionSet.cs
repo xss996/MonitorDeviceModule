@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Peiport_pofessionalMonitorDeviceClient.entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.entities
         public int PaletteType { get; set; }
         public double TrackPos { get; set; }
         public string Remark { get; set; }
+        public MeasureTaskSet OneTask{get;set;}
 
     }
 }

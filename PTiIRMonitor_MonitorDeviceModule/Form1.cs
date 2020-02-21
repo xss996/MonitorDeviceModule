@@ -1,9 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PTiIRMonitor_MonitorDeviceModule.constant;
+using PTiIRMonitor_MonitorDeviceModule.ctrl;
 using PTiIRMonitor_MonitorDeviceModule.entities;
 using PTiIRMonitor_MonitorDeviceModule.util;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,9 +24,13 @@ namespace Peiport_pofessionalMonitorDeviceClient
         public Form1()
         {
             InitializeComponent();
+            gLogWriter.StartLog();
             M_ClientOpt.Pjson.frmMain = this;
             M_ClientOpt.frmThis = this;
             M_ClientOpt.DevMonitorInit();
+
+            M_ClientOpt.globalCtrl.createCrusieThread();
+            M_ClientOpt.globalCtrl.createHeartbeatThread();
 
 
             string server_ip = INIUtil.Read("Server", "ip", Constant.IniFilePath);
@@ -73,7 +81,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }
 
 
-            Thread thread_server = new Thread(ProxyScan);   //服务器
+            Thread thread_server = new Thread(SocketServerScan);   //服务器
             thread_server.Start();
 
             Thread thread_heatbeat = new Thread(M_ClientOpt.SendHeartBeatCmd);
@@ -90,6 +98,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
 
             Thread thread_monDev_SQL = new Thread(M_ClientOpt.SqlStatusScan);  //数据库状态监控
             thread_monDev_SQL.Start();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -115,18 +124,16 @@ namespace Peiport_pofessionalMonitorDeviceClient
             //}
         }
 
-
         int connectServerCount = 0;
 
-
-        public void ProxyScan()
+        public void SocketServerScan()
         {
             while (true)
             {
-                Thread.Sleep(1500);
-                Debug.WriteLine(">>>>>>>>>>>>>>>>>>>服务器状态监控线程:" + Thread.CurrentThread.Name + ";socket状态:" + M_ClientOpt.GetSocketState() + ",服务器连接状态:" + M_ClientOpt.Pjson.OptJsonQuestConnectStatus() + ",用户登录状态:" + M_ClientOpt.GetLoginStatus() + ",心跳检测状态:" + M_ClientOpt.StartHeartBeat);
-
-                if (!M_ClientOpt.GetSocketState())
+                Thread.Sleep(3000);
+                Debug.WriteLine(">>>>>>>>>>>>>>>>>>>服务器状态监控线程:" + "服务器连接状态:" + M_ClientOpt.Pjson.OptJsonQuestConnectStatus() + ",用户登录状态:" + M_ClientOpt.GetLoginStatus() + ",心跳检测状态:" + M_ClientOpt.globalCtrl.HeartStatus);
+              
+                if (!M_ClientOpt.Pjson.OptJsonQuestConnectStatus())
                 {
                     M_ClientOpt.SetLoginStatus();
                     string ip = INIUtil.Read("Server", "ip", Constant.IniFilePath);
@@ -169,20 +176,22 @@ namespace Peiport_pofessionalMonitorDeviceClient
             M_ClientOpt.funMonitorServerReceiCmdDealScan();
         }
 
-
-
         private void revVar_timer_tick(object sender, EventArgs e)
         {
-            label_socket.Text = M_ClientOpt.GetSocketState().ToString();
+            //服务器相关          
             label_server.Text = M_ClientOpt.Pjson.OptJsonQuestConnectStatus().ToString();
             label_loginStatus.Text = M_ClientOpt.GetLoginStatus().ToString();
-            label_heatbeatStatus.Text = M_ClientOpt.StartHeartBeat.ToString();
-
+            label_heatbeatStatus.Text = M_ClientOpt.globalCtrl.HeartStatus.ToString();          
+            label12.Text = string.Format("当前服务器IP:{0},端口号:{1}", INIUtil.Read("Server", "ip", Constant.IniFilePath), INIUtil.Read("Server", "port", Constant.IniFilePath));
+            label13.Text = string.Format("当前用户登录信息,用户名:{0},密码:{1}", INIUtil.Read("USER", "username", Constant.IniFilePath), INIUtil.Read("USER", "password", Constant.IniFilePath));
 
             label_IR.Text = M_ClientOpt.globalCtrl.IRScanState().ToString();
-            label_FTP.Text = M_ClientOpt.globalCtrl.FtpStatus.ToString();
-            label_Database.Text = M_ClientOpt.globalCtrl.DatabaseStatus.ToString();
-            label_cruise.Text = M_ClientOpt.globalCtrl.cruiseCtrl.CruiseStatus.ToString();
+            label14.Text = string.Format("当前红外连接信息,连接IP:{0},端口:{1}", M_ClientOpt.globalCtrl.irCtrl.IP, M_ClientOpt.globalCtrl.irCtrl.port);
+            label15.Text = string.Format("当前可见光连接信息,连接IP:{0},端口:{1},通道:{2},连接名:{3},密码:{4}", M_ClientOpt.globalCtrl.tvCtrl.IP, M_ClientOpt.globalCtrl.tvCtrl.port,
+              M_ClientOpt.globalCtrl.tvCtrl.channel, M_ClientOpt.globalCtrl.tvCtrl.username, M_ClientOpt.globalCtrl.tvCtrl.password);
+            label_FTP.Text = M_ClientOpt.globalCtrl.GetFtpConnectStatus().ToString();
+            label_Database.Text = M_ClientOpt.globalCtrl.GetSqlConnectionStatus().ToString();
+            label_cruise.Text = M_ClientOpt.globalCtrl.cruiseCtrl.cruiseStatus.ToString();
             int TVState = M_ClientOpt.globalCtrl.TVScanState();
             if (TVState == -1)
             {
@@ -239,7 +248,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
 
         private void 红外调试ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.CruiseStatus) > -1 && Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.CruiseStatus) < 2)
+            if (Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.cruiseStatus) > -1 && Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.cruiseStatus) < 2)
             {
                 Hide();
                 IRTestForm frm2 = new IRTestForm(this);
@@ -253,7 +262,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
 
         private void 可见光调试ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.CruiseStatus) > -1 && Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.CruiseStatus) < 2)
+            if (Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.cruiseStatus) > -1 && Convert.ToInt32(M_ClientOpt.globalCtrl.cruiseCtrl.cruiseStatus) < 2)
             {
                 Hide();
                 TVTestForm frm3 = new TVTestForm(this);
@@ -264,6 +273,96 @@ namespace Peiport_pofessionalMonitorDeviceClient
                 MessageBox.Show("系统正在巡检,请先停止巡检再进行测试");
             }
 
+        }
+
+        private void btn_updateServerInfo_Click(object sender, EventArgs e)
+        {          
+            try
+            {
+                if(INIUtil.Write("Server", "ip", label_serverIP.Text, Constant.IniFilePath)>0 && INIUtil.Write("Server", "port", num_serverPort.Value.ToString(), Constant.IniFilePath) > 0)
+                {
+                    MessageBox.Show("服务器信息修改成功","提示");
+                   
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("服务器信息修改失败,请重试!", "提示");
+            }
+            
+            
+        } 
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Position pos = new Position();
+            pos.PositionName = pos_name.Text;
+            pos.Station_Index = Convert.ToInt32(pos_stationIndex.Value);
+            string sql=null;
+            List<MySqlParameter> pamList = new List<MySqlParameter>();
+
+            if (pos_cruiseType.Text.ToString().Equals("隔时巡检"))
+            {
+                pos.CruiseType = 0;
+                pos.CruiseInterval = Convert.ToInt32(pos_interval.Value);
+                sql = "insert into cruise_position(Station_Index,PositionName,CruiseInterval,CruiseType) values(@Station_Index,@PositionName,@CruiseInterval,@CruiseType)";
+                pamList.Add(new MySqlParameter("@Station_Index", pos.Station_Index));
+                pamList.Add(new MySqlParameter("@PositionName", pos.PositionName));
+                pamList.Add(new MySqlParameter("@CruiseInterval", pos.CruiseInterval));
+                pamList.Add(new MySqlParameter("@CruiseType", pos.CruiseType));
+
+            }
+            else if (pos_cruiseType.Text.ToString().Equals("定时巡检"))
+            {
+                pos.CruiseType = 1;
+                pos.StartCruiseTime = pos_cruiseStartTime.Value;              
+                sql = "insert into cruise_position(Station_Index, PositionName, StartCruiseTime, CruiseType) values(@Station_Index,@PositionName,@StartCruiseTime,@CruiseType)";
+                pamList.Add(new MySqlParameter("@Station_Index",pos.Station_Index));
+                pamList.Add(new MySqlParameter("@PositionName", pos.PositionName));
+                pamList.Add(new MySqlParameter("@StartCruiseTime", pos.StartCruiseTime));
+                pamList.Add(new MySqlParameter("@CruiseType", pos.CruiseType));               
+            }
+            MySqlConnection conn = GlobalCtrl.GetSqlConnection();
+            if(SqlHelper.AddData(conn, sql,pamList.ToArray()))
+            {
+                sql = "select * from cruise_position where Position_Index = (select max(Position_Index) from cruise_position)";
+                DataTable data =SqlHelper.QueryData(conn, sql, null);
+                
+                MessageBox.Show("固定点添加成功");
+            }
+            else
+            {
+                MessageBox.Show("固定点添加失败");
+            }
+
+            
+        }
+
+        int count = 0;
+        private void ReceiveCruiseLog_timer_Tick(object sender, EventArgs e)
+        {
+            if (M_ClientOpt.globalCtrl.cruiseCtrl.cruiseLogMsgs.Count != 0)
+            {
+                for(var i=0;i< M_ClientOpt.globalCtrl.cruiseCtrl.cruiseLogMsgs.Count; i++)
+                {
+                    richTextBox1.Text += (M_ClientOpt.globalCtrl.cruiseCtrl.cruiseLogMsgs[0]+"\n");
+                    M_ClientOpt.globalCtrl.cruiseCtrl.cruiseLogMsgs.RemoveAt(0);
+                    count++;
+                }
+                Thread.Sleep(200);
+                if (count >=25)
+                {
+                    richTextBox1.Clear();
+                    count = 0;
+                }
+               
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
         }
     }
 }

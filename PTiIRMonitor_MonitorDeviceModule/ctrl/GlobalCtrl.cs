@@ -17,23 +17,17 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         public int TVConnectStatus = 0;
         public bool IRConnectStatus = false;
         public Constant.CruiseState CruiseStatus = Constant.CruiseState.STOP;
-        public bool LoginStatus = false;
-        public bool DatabaseStatus = false;
-        public bool FtpStatus = false;
+        public bool LoginStatus = false;    
 
-        public bool HeartStatus = true;
+        public bool HeartStatus = false;
         public int HeartBeatCount = 0;
 
-        //连接控制全局变量
-        //bool TVConnectCtrl = false;
-        //bool IRConnectCtrl = false;
-        //bool PTZConnectCtrl = false;
-        //bool CruiseCtrl = false;
+        private DateTime lastHeartTime = DateTime.Parse("1970-01-01 00:00:00");       
 
         public SysCtrl sysCtrl = new SysCtrl();
         public TVCtrl tvCtrl = new TVCtrl();
         public IRCtrl irCtrl = new IRCtrl();
-        public CruiseCtrl cruiseCtrl = new CruiseCtrl();
+        public CruiseCtrl cruiseCtrl = new CruiseCtrl();      
         TempHumCtrl tempHumCtrl = new TempHumCtrl();
         RobotCtrl robotCtrl = new RobotCtrl();
 
@@ -48,7 +42,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             irCtrl.Init();
 
         }
-        #region 连接
+        #region 红外,可见光连接及状态获取
         public bool TVConnect()
         {
             return tvCtrl.Connect(true);
@@ -57,15 +51,6 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         {
             return irCtrl.Connect();
         }
-        #endregion
-        /// <summary>
-        /// 退出系统
-        /// </summary>
-        public void Exit()
-        {
-
-        }
-
         /// <summary>
         /// 红外监控状态扫描
         /// </summary>
@@ -97,6 +82,16 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             }
             return TVConnectStatus;
         }
+        #endregion
+
+        /// <summary>
+        /// 退出系统
+        /// </summary>
+        public void Exit()
+        {
+
+        }
+
         /// <summary>
         /// 云台监控扫描
         /// </summary>
@@ -104,10 +99,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
         /// <summary>
         /// 自动巡检监控扫描
         /// </summary>
-        public void CruiseStatusScan()
-        {
-
-        }
+        
         /// <summary>
         /// 检查通讯扫命令扫描（或委托）
         /// </summary>
@@ -166,9 +158,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                         }
                         if (job["cmdAction"].ToString() == "Palpitate")         //心跳
                         {
-                            if (job["result"].ToString() == Constant.Result_OK)
+                            if (job["result"].ToString().Equals(Constant.Result_OK))
                             {
-
+                                lastHeartTime = DateTime.Now;
                             }
                             else
                             {
@@ -192,17 +184,13 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                                         par1 = par.value;
                                     }
                                 }
-
-                                Thread thread_cruise = new Thread(CruiseSetUp);
                                 if (par1 == "0")
-                                {
-                                    cruiseCtrl.SetCruiseCtrl(true);
-                                    StartCruiseTime = DateTime.Now;   //获取开始巡检时间
-                                    thread_cruise.Start();
+                                {                                
+                                    cruiseCtrl.CruiseSwtich = true;
                                 }
                                 else
                                 {
-                                    cruiseCtrl.SetCruiseCtrl(false);
+                                    cruiseCtrl.CruiseSwtich = false;
                                 }
                             }
                         }
@@ -243,7 +231,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                     }
 
                     #endregion
-                    if (IRConnectStatus && TVConnectStatus > 0 && Convert.ToInt32(cruiseCtrl.CruiseStatus) < 1)
+                    if (IRConnectStatus && TVConnectStatus > 0 && Convert.ToInt32(cruiseCtrl.cruiseStatus) <= 1)
                     {
                         #region 云台
                         if (job["cmdType"].ToString() == "2")  //PTZ
@@ -1084,34 +1072,31 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             return strJson;
         }
 
-        public void GetFtpConnect()
+        #region ftp连接及连接状态获取
+        public bool GetFtpConnect()
         {
             string ftp_ip = INIUtil.Read("Ftp", "ip", Constant.IniFilePath);
-            string rootDirectory = "ftp://" + ftp_ip;
+            int ftp_port = Convert.ToInt32(INIUtil.Read("Ftp", "port", Constant.IniFilePath));
+            string rootDirectory = "ftp://" + ftp_ip+":"+ftp_port;
             string ftp_username = INIUtil.Read("DATABASE", "username", Constant.IniFilePath);
             string ftp_password = INIUtil.Read("DATABASE", "password", Constant.IniFilePath);
-
-            try
-            {
-                if (FtpUtil.Connect(rootDirectory, ftp_username, ftp_password))
-                {
-                    FtpStatus = true;
-
-                }
-                else
-                {
-                    FtpStatus = false;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                FtpStatus = false;
-            }
-
+            return  FtpUtil.Connect(rootDirectory, ftp_username, ftp_password);    
         }
 
-        public void GetSqlConnection()
+        public bool GetFtpConnectStatus()
+        {
+            string ftp_ip = INIUtil.Read("Ftp", "ip", Constant.IniFilePath);
+            int ftp_port = Convert.ToInt32(INIUtil.Read("Ftp", "port", Constant.IniFilePath));           
+            string ftp_username = INIUtil.Read("DATABASE", "username", Constant.IniFilePath);
+            string ftp_password = INIUtil.Read("DATABASE", "password", Constant.IniFilePath);
+            int timeout = Convert.ToInt32(INIUtil.Read("Ftp", "timeout", Constant.IniFilePath));
+            string msg = "";
+            return FtpUtil.CheckFtpConnectStatus(ftp_ip, ftp_username, ftp_password,out msg, ftp_port, timeout);
+        }
+        #endregion
+
+        #region   数据库相关
+        public bool GetSqlConnectionStatus()
         {
             MySqlConnection conn = null;
             try
@@ -1123,13 +1108,13 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
                 string databaseName = INIUtil.Read("DATABASE", "databaseName", Constant.IniFilePath);
                 conn = SqlHelper.GetConnection(ip, Convert.ToInt32(strPort), username, password, databaseName);
                 conn.Open();
-                DatabaseStatus = true;
-                Debug.WriteLine("数据库连接成功...");
+                return true;
+               
             }
             catch (Exception ex)
             {
-                DatabaseStatus = false;
-                Debug.WriteLine("数据库连接失败...");
+               return false;
+                
             }
             finally
             {
@@ -1137,39 +1122,118 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             }
         }
 
-        public void CruiseSetUp()
-        {
-            while (true)
+        public static MySqlConnection GetSqlConnection()
+        {          
+            try
             {
+                string ip = INIUtil.Read("DATABASE", "ip", Constant.IniFilePath);
+                string strPort = INIUtil.Read("DATABASE", "port", Constant.IniFilePath);
+                string username = INIUtil.Read("DATABASE", "username", Constant.IniFilePath);
+                string password = INIUtil.Read("DATABASE", "password", Constant.IniFilePath);
+                string databaseName = INIUtil.Read("DATABASE", "databaseName", Constant.IniFilePath);             
+                return SqlHelper.GetConnection(ip, Convert.ToInt32(strPort), username, password, databaseName);
+            }
+            catch (Exception ex)
+            {               
+                return null;
+            }
+        }
+        #endregion
 
-                //IRScanState() && TVScanState() > 0 &&
-                if (StartCruiseTime.CompareTo(DateTime.Parse("1970-01-01 00:00:00")) != 0)
+        #region 巡检相关
+        public void createCrusieThread()
+        {
+            Thread th = new Thread(ThreaMaindCruiseSetUp);
+            th.Start();
+        }
+        public void deleteCruiseThread()
+        { }
+        public  void ThreaMaindCruiseSetUp()
+        {
+            gLogWriter.WriteLog("巡检线程启动", "");
+            cruiseCtrl.isFirstCruise = true;
+            cruiseCtrl.LastCruiseTime = DateTime.Now;          
+            cruiseCtrl.cruiseStatus = Constant.CruiseState.FREE;
+            while (true)
+            {              
+                Thread.Sleep(3000);
+                if (!cruiseCtrl.CruiseSwtich)
                 {
-                    //测试数据
-                    CruiseObj cruiseObj = new CruiseObj();
-                    cruiseObj.StartTime = StartCruiseTime;
-                    cruiseObj.CruiseTime = 2;
-                    cruiseObj.Interval = 3;
-                    cruiseObj.CruiseType = 0;
-
-                    //  cruiseObj.CruiseType = 1;
-                    DateTime date1 = DateTime.Parse("2019-12-02 15:50:58");
-                    DateTime date2 = DateTime.Parse("2019-12-02 15:53:58");
-                    DateTime date3 = DateTime.Parse("2019-12-02 15:56:58");
-                    List<DateTime> dateTimes = new List<DateTime>();
-                    dateTimes.Add(date1);
-                    dateTimes.Add(date2);
-                    dateTimes.Add(date3);
-                    cruiseObj.dateTimeList = dateTimes;
-
-                    cruiseCtrl.StartCruise(irCtrl, tvCtrl, cruiseObj);
+                    gLogWriter.WriteLog("巡检开关", "关");
+                    cruiseCtrl.cruiseLogMsgs.Add("巡检开关:关");
+                    cruiseCtrl.cruiseStatus = Constant.CruiseState.STOP;
+                    continue;
                 }
-                Thread.Sleep(60 * 1000);
+                else
+                {
+                    gLogWriter.WriteLog("巡检开关", "开");
+                    cruiseCtrl.cruiseLogMsgs.Add("巡检开关:开");
+                }
+                if (tvCtrl.GetTVStatus() <= 0)
+                {
+                    gLogWriter.WriteLog("可见光登录状态", "未登录");                    
+                    continue;
+                }
+                if (!irCtrl.GetIRConnectStatus())
+                {
+                    gLogWriter.WriteLog("红外连接状态", "未连接");
+                    continue;
+
+                }
+                if (!GetSqlConnectionStatus())
+                {
+                    gLogWriter.WriteLog("数据库连接状态", "未连接");
+                    continue;
+                }
+                if (!GetFtpConnect())
+                {
+                    gLogWriter.WriteLog("FTP连接状态", "未连接");
+                    continue;
+                }
+                if (!cruiseCtrl.CheckTimeIsNeedCruise())
+                {
+                    gLogWriter.WriteLog("是否到巡检时间", "否");
+                    cruiseCtrl.cruiseLogMsgs.Add("是否到巡检时间:否");
+                    continue;
+                }
+                cruiseCtrl.cruiseStatus = Constant.CruiseState.RUNNING;
+                cruiseCtrl.CruiseExcute(irCtrl,tvCtrl);
+                cruiseCtrl.LastCruiseTime = DateTime.Now;
+                gLogWriter.WriteLog("巡检一次结束时间", cruiseCtrl.LastCruiseTime.ToString());
+                cruiseCtrl.cruiseLogMsgs.Add(string.Format("巡检一次结束时间:{0}", cruiseCtrl.LastCruiseTime.ToString()));              
+                cruiseCtrl.isFirstCruise = false;
+                cruiseCtrl.cruiseStatus = Constant.CruiseState.FREE;
             }
 
 
 
         }
+        #endregion
+
+        #region 心跳检测相关
+        public void ThreadHeartbeatScan()
+        {
+            while (true)
+            {
+                DateTime currentTime = DateTime.Now;
+                if(lastHeartTime.CompareTo(Convert.ToDateTime("1970-01-01 00:00:00")) != 0)
+                {
+                    TimeSpan time = currentTime - lastHeartTime;
+                    if (time.TotalSeconds >= 30)
+                        HeartStatus = false;
+                    else
+                        HeartStatus = true;
+                }
+                Thread.Sleep(4000);
+            }
+        }
+
+        public void createHeartbeatThread()
+        {
+            Thread th = new Thread(ThreadHeartbeatScan);
+            th.Start();
+        }
+        #endregion
 
     }
 }

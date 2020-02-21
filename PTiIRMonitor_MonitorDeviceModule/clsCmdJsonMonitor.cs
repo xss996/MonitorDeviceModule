@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using PTiIRMonitor_MonitorDeviceModule.ctrl;
 using PTiIRMonitor_MonitorDeviceModule.util;
-using SocketClientTest;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -260,7 +259,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
                         if (!str1.Equals(strjsons))
                         {
                             frmMain.strMessageDispBuf = str2 + str1 + "\r\n";
-                            gLogWriter.WriteLog(str2, str1);
+                           // gLogWriter.WriteLog(str2, str1);
                             lsts_CmdStrBuf.Clear();//清空
                         }
                         string strUser = job1["receiver"].ToString();//获取本地地址
@@ -539,7 +538,7 @@ namespace Peiport_pofessionalMonitorDeviceClient
             m_stuSystemVar.strIP = str1;
             m_stuSystemVar.intPort = intPort;
             str1 = "IP地址:" + strIP + "，端口号:" + intPort.ToString();
-            gLogWriter.WriteLog("连接Json服务器", str1);
+          //  gLogWriter.WriteLog("连接Json服务器", str1);
             return true;
         }
         public void m_clsClient_OnConnect(object obj, Client.EventArgs_Connect e)//连接状态
@@ -610,7 +609,8 @@ namespace Peiport_pofessionalMonitorDeviceClient
 
         public bool GetSocketState()
         {
-            return m_clsClient.GetSocketState();
+              return m_clsClient.GetSocketState();
+           // return m_clsClient.IsSocketConnected(null);
         }
     }
 }

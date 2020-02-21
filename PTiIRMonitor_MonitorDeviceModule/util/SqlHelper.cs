@@ -64,7 +64,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
         /// <param name="sqlStr"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public static DataTable QueryData(MySqlConnection conn, String sqlStr, params SqlParameter[] parameter)
+        public static DataTable QueryData(MySqlConnection conn, String sqlStr, params MySqlParameter[] parameter)
         {
             try
             {

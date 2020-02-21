@@ -8,10 +8,10 @@
 
         /// ini文件存放路径
         public static readonly string IniFilePath = @"E:\projects\Net项目备份\变电站无人值守系统\Output\Monitor.ini";
-        public static readonly string imageSavePath = @"D:\Peiport_images\";
+        public static readonly string imageSavePath = @"D:\Cruise_images\";
 
         //返回结果
-        public static readonly string Result_OK = "ok";
+        public static readonly string Result_OK = "OK";
         public static readonly string Result_ERROR = "error";
 
 
@@ -24,9 +24,8 @@
             FREE = 1,   //空闲状态
             RUNNING = 2,  //巡检中
             ERROR = -1    //巡检出错
-        }
-
-       
+        }     
+    
     }
 
 }

@@ -1,12 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace PTiIRMonitor_MonitorDeviceModule.util
 {
     public class FtpUtil
     {
         private FtpUtil() { }
+
+        private static Socket socket = null;
+        private static ManualResetEvent timeoutObject;
+        private static bool isConnected = false;
 
         /// <summary>
         /// 连接ftp服务器
@@ -194,6 +201,159 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+        
+        /// <summary>
+        /// 获取ftp服务器连接的状态
+        /// </summary>
+        /// <param name="ip">IP地址</param>
+        /// <param name="ftpuser">连接名,不为空</param>
+        /// <param name="ftppas">密码,不为空</param>
+        /// <param name="errmsg"></param>
+        /// <param name="port">端口</param>
+        /// <param name="timeout">超时</param>
+        /// <returns>连接的状态</returns>
+        public static bool CheckFtpConnectStatus(string ip, string ftpuser, string ftppsw, out string errmsg, int port = 21, int timeout = 2000)
+        {
+            #region 输入数据检查  
+            errmsg = "";
+            IPAddress address;
+            try
+            {
+                address = IPAddress.Parse(ip);
+            }
+            catch
+            {               
+                return false;
+            }
+            #endregion
+            isConnected = false;
+
+            bool ret = false;
+            byte[] result = new byte[1024];
+            int pingStatus = 0, userStatus = 0, pasStatus = 0, exitStatus = 0; //连接返回,用户名返回,密码返回,退出返回
+            timeoutObject = new ManualResetEvent(false);
+            try
+            {
+                int receiveLength;
+
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket.SendTimeout = timeout;
+                socket.ReceiveTimeout = timeout;//超时设置成2000毫秒
+
+                try
+                {
+                    socket.BeginConnect(new IPEndPoint(address, port), new AsyncCallback(callBackMethod), socket); //开始异步连接请求
+                    if (!timeoutObject.WaitOne(timeout, false))
+                    {
+                        socket.Close();
+                        socket = null;
+                        pingStatus = -1;
+                    }
+                    if (isConnected)
+                    {
+                        pingStatus = 200;
+                    }
+                    else
+                    {
+                        pingStatus = -1;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    pingStatus = -1;
+                }
+
+                if (pingStatus == 200) //状态码200 - TCP连接成功
+                {
+                    receiveLength = socket.Receive(result);
+                    pingStatus = getFtpReturnCode(result, receiveLength); //连接状态
+                    if (pingStatus == 220)//状态码220 - FTP返回欢迎语
+                    {
+                        socket.Send(Encoding.Default.GetBytes(string.Format("{0}{1}", "USER " + ftpuser, Environment.NewLine)));
+                        receiveLength = socket.Receive(result);
+                        userStatus = getFtpReturnCode(result, receiveLength);
+                        if (userStatus == 331)//状态码331 - 要求输入密码
+                        {
+                            socket.Send(Encoding.Default.GetBytes(string.Format("{0}{1}", "PASS " + ftppsw, Environment.NewLine)));
+                            receiveLength = socket.Receive(result);
+                            pasStatus = getFtpReturnCode(result, receiveLength);
+                            if (pasStatus == 230)//状态码230 - 登入因特网
+                            {
+                                errmsg = string.Format("FTP:{0}@{1}登陆成功", ip, port);
+                                ret = true;
+                                socket.Send(Encoding.Default.GetBytes(string.Format("{0}{1}", "QUIT", Environment.NewLine))); //登出FTP
+                                receiveLength = socket.Receive(result);
+                                exitStatus = getFtpReturnCode(result, receiveLength);
+                            }
+                            else
+                            { // 状态码230的错误
+                                errmsg = string.Format("FTP:{0}@{1}登陆失败,用户名或密码错误({2})", ip, port, pasStatus);
+                            }
+                        }
+                        else
+                        {// 状态码331的错误 
+                            errmsg = string.Format("使用用户名:'{0}'登陆FTP:{1}@{2}时发生错误({3}),请检查FTP是否正常配置!", ftpuser, ip, port, userStatus);
+                        }
+                    }
+                    else
+                    {// 状态码220的错误 
+                        errmsg = string.Format("FTP:{0}@{1}返回状态错误({2}),请检查FTP服务是否正常运行!", ip, port, pingStatus);
+                    }
+                }
+                else
+                {// 状态码200的错误
+                    errmsg = string.Format("无法连接FTP服务器:{0}@{1},请检查FTP服务是否启动!", ip, port);
+                }
+            }
+            catch (Exception ex)
+            { //连接出错 
+                errmsg = string.Format("FTP:{0}@{1}连接出错:", ip, port) + ex.Message;             
+                ret = false;
+            }
+            finally
+            {
+                if (socket != null)
+                {
+                    socket.Close(); //关闭socket
+                    socket = null;
+                }
+            }
+            return ret;
+        }
+      
+        private static void callBackMethod(IAsyncResult asyncResult)
+        {
+            try
+            {
+                socket = asyncResult.AsyncState as Socket;
+                if (socket != null)
+                {
+                    socket.EndConnect(asyncResult);
+                    isConnected = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                isConnected = false;
+            }
+            finally
+            {
+                timeoutObject.Set();
+            }
+        }
+
+        private static int getFtpReturnCode(byte[] retByte, int retLen)
+        {
+            try
+            {
+                string str = Encoding.ASCII.GetString(retByte, 0, retLen).Trim();
+                return int.Parse(str.Substring(0, 3));
+            }
+            catch
+            {
+                return -1;
             }
         }
     }
