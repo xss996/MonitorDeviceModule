@@ -94,8 +94,16 @@ namespace PTiIRMonitor_MonitorDeviceModuleTests
             //List<int> IndexList = dao1.GetMeasureTaskIndex();
             // int i = IndexList.Count;
 
-            PrePositionSetDao dao2 = new PrePositionSetDao();
-           List< PrePositionSet> prePositionList= dao2.GetPrePosIndexByTaskIndex(1);
+            //  PrePositionSetDao dao2 = new PrePositionSetDao();
+            // List< PrePositionSet> prePositionList= dao2.GetPrePosIndexByTaskIndex(1);
+            string sql = "select * from record_tempmeasure where TempMeasure_Index=1";
+           MySqlConnection conn = SqlHelper.getConnection();
+           DataTable dt = SqlHelper.QueryData(conn, sql, null);
+           for(int i = 0; i < dt.Rows.Count; i++)
+            {
+                TempMeasure tempMeasure = new TempMeasure();
+                tempMeasure.TVFilePath = dt.Rows[i]["TVFilePath"].ToString();
+            }
         }
 
     }

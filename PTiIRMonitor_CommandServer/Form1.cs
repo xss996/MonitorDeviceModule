@@ -75,7 +75,7 @@ namespace Peiport_commandManegerSystem
             m_ClJsonCtrl.frmMain = this;
             m_MOJsonCtrl.frmMainMo = this;
             IPAddress ip;
-            string s = "192.168.123.128";
+            string s = "192.168.31.186";
             int i = 11574;
             int n = 11573;
             if (IPAddress.TryParse(s, out ip) == false)
@@ -88,7 +88,7 @@ namespace Peiport_commandManegerSystem
             int intport;
             IPAddress ip;
             string str1;
-            str1 = "192.168.123.128";
+            str1 = "192.168.31.186";
             intport = 11574;
             str1 = txbUserServerIP.Text;
             if (IPAddress.TryParse(txbUserServerIP.Text, out ip) == false)

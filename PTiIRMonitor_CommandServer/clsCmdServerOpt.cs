@@ -286,7 +286,7 @@ namespace Peiport_commandManegerSystem
 
 
         #region 看门狗心跳命令
-        Client C_Palpitate = new Client("192.168.123.128", 8900);
+        Client C_Palpitate = new Client("192.168.31.186", 8900);
         public void funPateServer()//启动心跳客户端
         {
             C_Palpitate.ConnectServer();

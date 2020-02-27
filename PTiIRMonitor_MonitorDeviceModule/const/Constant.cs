@@ -10,6 +10,9 @@
         public static readonly string IniFilePath = @"E:\projects\Net项目备份\变电站无人值守系统\Output\Monitor.ini";
         public static readonly string imageSavePath = @"D:\Cruise_images\";
 
+        public static readonly string ftp_autoCruiseFilePath = @"IRMonitorSystemFile/AutoCruiseFile/";
+        public static readonly string ftp_userManualFilePath = @"IRMonitorSystemFile/UserManualFile/";
+
         //返回结果
         public static readonly string Result_OK = "OK";
         public static readonly string Result_ERROR = "error";

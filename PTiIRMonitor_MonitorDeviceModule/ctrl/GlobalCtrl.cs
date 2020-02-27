@@ -1156,46 +1156,46 @@ namespace PTiIRMonitor_MonitorDeviceModule.ctrl
             cruiseCtrl.cruiseStatus = Constant.CruiseState.FREE;
             while (true)
             {              
-                Thread.Sleep(3000);
-                if (!cruiseCtrl.CruiseSwtich)
-                {
-                    gLogWriter.WriteLog("巡检开关", "关");
-                    cruiseCtrl.cruiseLogMsgs.Add("巡检开关:关");
-                    cruiseCtrl.cruiseStatus = Constant.CruiseState.STOP;
-                    continue;
-                }
-                else
-                {
-                    gLogWriter.WriteLog("巡检开关", "开");
-                    cruiseCtrl.cruiseLogMsgs.Add("巡检开关:开");
-                }
-                if (tvCtrl.GetTVStatus() <= 0)
-                {
-                    gLogWriter.WriteLog("可见光登录状态", "未登录");                    
-                    continue;
-                }
-                if (!irCtrl.GetIRConnectStatus())
-                {
-                    gLogWriter.WriteLog("红外连接状态", "未连接");
-                    continue;
+                Thread.Sleep(5000);
+                //if (!cruiseCtrl.CruiseSwtich)
+                //{
+                //    gLogWriter.WriteLog("巡检开关", "关");
+                //    cruiseCtrl.cruiseLogMsgs.Add("巡检开关:关");
+                //    cruiseCtrl.cruiseStatus = Constant.CruiseState.STOP;
+                //    continue;
+                //}
+                //else
+                //{
+                //    gLogWriter.WriteLog("巡检开关", "开");
+                //    cruiseCtrl.cruiseLogMsgs.Add("巡检开关:开");
+                //}
+                //if (tvCtrl.GetTVStatus() <= 0)
+                //{
+                //    gLogWriter.WriteLog("可见光登录状态", "未登录");                    
+                //    continue;
+                //}
+                //if (!irCtrl.GetIRConnectStatus())
+                //{
+                //    gLogWriter.WriteLog("红外连接状态", "未连接");
+                //    continue;
 
-                }
-                if (!GetSqlConnectionStatus())
-                {
-                    gLogWriter.WriteLog("数据库连接状态", "未连接");
-                    continue;
-                }
-                if (!GetFtpConnect())
-                {
-                    gLogWriter.WriteLog("FTP连接状态", "未连接");
-                    continue;
-                }
-                if (!cruiseCtrl.CheckTimeIsNeedCruise())
-                {
-                    gLogWriter.WriteLog("是否到巡检时间", "否");
-                    cruiseCtrl.cruiseLogMsgs.Add("是否到巡检时间:否");
-                    continue;
-                }
+                //}
+                //if (!GetSqlConnectionStatus())
+                //{
+                //    gLogWriter.WriteLog("数据库连接状态", "未连接");
+                //    continue;
+                //}
+                //if (!GetFtpConnect())
+                //{
+                //    gLogWriter.WriteLog("FTP连接状态", "未连接");
+                //    continue;
+                //}
+                //if (!cruiseCtrl.CheckTimeIsNeedCruise())
+                //{
+                //    gLogWriter.WriteLog("是否到巡检时间", "否");
+                //    cruiseCtrl.cruiseLogMsgs.Add("是否到巡检时间:否");
+                //    continue;
+                //}
                 cruiseCtrl.cruiseStatus = Constant.CruiseState.RUNNING;
                 cruiseCtrl.CruiseExcute(irCtrl,tvCtrl);
                 cruiseCtrl.LastCruiseTime = DateTime.Now;

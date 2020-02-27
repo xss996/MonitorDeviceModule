@@ -174,7 +174,7 @@
             this.txbUserServerIP.Name = "txbUserServerIP";
             this.txbUserServerIP.Size = new System.Drawing.Size(136, 21);
             this.txbUserServerIP.TabIndex = 95;
-            this.txbUserServerIP.Text = "192.168.123.128";
+            this.txbUserServerIP.Text = "192.168.31.186";
             // 
             // btnSetupUserServer
             // 
@@ -378,7 +378,7 @@
             this.txbMonitorServerIP.Name = "txbMonitorServerIP";
             this.txbMonitorServerIP.Size = new System.Drawing.Size(136, 21);
             this.txbMonitorServerIP.TabIndex = 130;
-            this.txbMonitorServerIP.Text = "192.168.123.128";
+            this.txbMonitorServerIP.Text = "192.168.31.186";
             // 
             // btnSetupMonitorServer
             // 

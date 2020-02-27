@@ -34,9 +34,9 @@ namespace PTiIRMonitor_MonitorDeviceModule.dao
         public List<PrePositionSet> GetPrePosIndexByTaskIndex(int taskIndex)
         {
             List<PrePositionSet> prePosList = new List<PrePositionSet>();
-            string sql = "SELECT m.MeasureTask_Index,m.PrePosSet_Index,m.DeviceInfo_Index,m.MeaType,m.TaskName,m.GetValueType," +
+            string sql = "SELECT m.MeasureTask_Index,m.PrePosSet_NO,m.DeviceInfo_Index,m.MeaType,m.TaskName,m.GetValueType,p.PrePosSet_Index," +
             "p.Position_Index,p.PrePositionNO,p.PrePositionName,p.PrePosType,p.TVZoom,p.IRFocus,p.GoPrePosDelays,p.PanAngle,p.TiltAngle,p.PTZHorAngle,p.PTZVerAngle,p.PaletteType  " +
-            "from cruise_measuretaskset m, cruise_prepositionset p where m.PrePosSet_Index = p.PrePosSet_Index and p.EnbleMeasure = 1 and m.MeasureTask_Index = @taskIndex";
+            "from cruise_measuretaskset m, cruise_prepositionset p where m.PrePosSet_NO = p.PrePositionNO and p.EnbleMeasure = 1 and m.MeasureTask_Index = @taskIndex";
 
             List<MySqlParameter> parmList = new List<MySqlParameter>();
             parmList.Add(new MySqlParameter("@taskIndex", taskIndex));

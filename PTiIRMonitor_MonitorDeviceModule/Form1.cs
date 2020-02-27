@@ -29,8 +29,8 @@ namespace Peiport_pofessionalMonitorDeviceClient
             M_ClientOpt.frmThis = this;
             M_ClientOpt.DevMonitorInit();
 
-            M_ClientOpt.globalCtrl.createCrusieThread();
-            M_ClientOpt.globalCtrl.createHeartbeatThread();
+            M_ClientOpt.globalCtrl.createCrusieThread();   //巡检启动线程
+            M_ClientOpt.globalCtrl.createHeartbeatThread();  //定时检测心跳是否正常
 
 
             string server_ip = INIUtil.Read("Server", "ip", Constant.IniFilePath);
@@ -81,10 +81,10 @@ namespace Peiport_pofessionalMonitorDeviceClient
             }
 
 
-            Thread thread_server = new Thread(SocketServerScan);   //服务器
+            Thread thread_server = new Thread(SocketServerScan);   //服务器登录,用户登录相关线程
             thread_server.Start();
 
-            Thread thread_heatbeat = new Thread(M_ClientOpt.SendHeartBeatCmd);
+            Thread thread_heatbeat = new Thread(M_ClientOpt.SendHeartBeatCmd);  //定时发送心跳指令
             thread_heatbeat.Start();
 
             Thread thread_monDev_IR = new Thread(M_ClientOpt.IRStatusScan);    //红外状态监控

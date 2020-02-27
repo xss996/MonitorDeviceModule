@@ -14,7 +14,7 @@ namespace PTiIRMonitor_MonitorDeviceModule.util
         private const int port = 3306;
         private const String username = "root";
         private const String password = "root";
-        private const String database = "newsystem";
+        private const String database = "monitor";
 
         /// <summary>
         /// 初始化连接数据库,本机测试
